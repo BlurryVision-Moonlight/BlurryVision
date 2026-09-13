@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlurryVision AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #08090d;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(130,70,255,.15), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(255,70,150,.08), transparent 35%),
+        #08090d;
+    }
+
+    /* NAVBAR */
+
+    nav {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6%;
+      border-bottom: 1px solid #20232d;
+      background: rgba(8,9,13,.92);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(15px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg,#8d5cff,#ff4f9a);
+      font-weight: bold;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .free-badge {
+      font-size: 12px;
+      color: #aeb4c3;
+      border: 1px solid #292d38;
+      padding: 7px 11px;
+      border-radius: 20px;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #252936;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c9cdd8;
+      font-weight: bold;
+    }
+
+    /* HERO */
+
+    .hero {
+      max-width: 1150px;
+      margin: auto;
+      padding: 80px 22px 50px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      border: 1px solid #302947;
+      background: #12101c;
+      color: #b996ff;
+      padding: 8px 14px;
+      border-radius: 25px;
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 8vw, 76px);
+      line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 22px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg,#fff,#bb9cff,#ff75ae);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: auto;
+      color: #9da3b1;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    /* CHARACTER CARD */
+
+    .section {
+      max-width: 1050px;
+      margin: auto;
+      padding: 20px 22px 80px;
+    }
+
+    .section-title {
+      margin-bottom: 22px;
+      font-size: 25px;
+    }
+
+    .characters {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid #242834;
+      background: linear-gradient(145deg,#11131a,#0d0f15);
+      border-radius: 20px;
+      padding: 22px;
+      transition: .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: #51436e;
+    }
+
+    .character-avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 27px;
+      margin-bottom: 17px;
+      background: linear-gradient(135deg,#503c91,#b74f7e);
+    }
+
+    .card h3 {
+      font-size: 19px;
+      margin-bottom: 7px;
+    }
+
+    .card p {
+      color: #8f96a5;
+      line-height: 1.5;
+      font-size: 14px;
+      min-height: 42px;
+    }
+
+    .card button {
+      width: 100%;
+      margin-top: 18px;
+      border: 0;
+      border-radius: 11px;
+      padding: 12px;
+      background: #fff;
+      color: #08090d;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* CHAT DEMO */
+
+    .demo {
+      max-width: 850px;
+      margin: 0 auto 80px;
+      padding: 0 22px;
+    }
+
+    .chat-box {
+      border: 1px solid #292d38;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #0d0f15;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 17px 20px;
+      border-bottom: 1px solid #242732;
+    }
+
+    .online {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #52d58b;
+    }
+
+    .chat-name {
+      font-weight: 700;
+    }
+
+    .chat-status {
+      color: #737b8b;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .messages {
+      min-height: 300px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 12px 15px;
+      border-radius: 15px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .ai {
+      background: #191c25;
+      color: #dfe2ea;
+      border-bottom-left-radius: 5px;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: linear-gradient(135deg,#6948b7,#b24e80);
+      border-bottom-right-radius: 5px;
+    }
+
+    .chat-input {
+      padding: 14px;
+      border-top: 1px solid #242732;
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      border: 1px solid #2b2f3b;
+      background: #13151c;
+      color: #fff;
+      border-radius: 12px;
+      padding: 13px;
+      outline: none;
+    }
+
+    .chat-input button {
+      border: 0;
+      border-radius: 12px;
+      padding: 0 20px;
+      background: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* PREMIUM */
+
+    .premium {
+      max-width: 1050px;
+      margin: 0 auto 80px;
+      padding: 0 22px;
+    }
+
+    .premium-box {
+      border: 1px solid #3a304d;
+      background: linear-gradient(135deg,#15121e,#100f15);
+      border-radius: 22px;
+      padding: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .premium-box h2 {
+      font-size: 27px;
+      margin-bottom: 9px;
+    }
+
+    .premium-box p {
+      color: #9298a6;
+      line-height: 1.5;
+    }
+
+    .premium-btn {
+      white-space: nowrap;
+      border: 0;
+      padding: 14px 22px;
+      border-radius: 12px;
+      background: linear-gradient(135deg,#8a5cff,#e65b9c);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 1px solid #20232d;
+      padding: 28px 20px;
+      text-align: center;
+      color: #666d7b;
+      font-size: 13px;
+    }
+
+    /* MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 430px;
+      background: #11131a;
+      border: 1px solid #303440;
+      border-radius: 20px;
+      padding: 28px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 10px;
+    }
+
+    .modal-box p {
+      color: #9298a6;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .close-btn {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #303440;
+      background: #191c24;
+      color: #fff;
+      border-radius: 11px;
+      cursor: pointer;
+    }
+
+    @media(max-width:750px) {
+      .characters {
+        grid-template-columns: 1fr;
+      }
+
+      .premium-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .premium-btn {
+        width: 100%;
+      }
+
+      nav {
+        padding: 0 18px;
+      }
+
+      .free-badge {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">B</div>
+      <span>BlurryVision AI</span>
+    </div>
+
+    <div class="nav-right">
+      <div class="free-badge">FREE DEMO</div>
+      <div class="avatar">U</div>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="eyebrow">
+      ✦ AI Romantic Characters
+    </div>
+
+    <h1>
+      Your story.<br>
+      <span class="gradient-text">Your character.</span>
+    </h1>
+
+    <p>
+      Meet expressive AI characters designed for immersive,
+      romantic conversations and roleplay experiences.
+    </p>
+
+  </section>
+
+
+  <!-- CHARACTERS -->
+  <section class="section">
+
+    <h2 class="section-title">Choose a character</h2>
+
+    <div class="characters">
+
+      <div class="card">
+        <div class="character-avatar">C</div>
+
+        <h3>Chandona</h3>
+
+        <p>
+          Warm, caring and romantic personality.
+        </p>
+
+        <button onclick="openChat('Chandona')">
+          Start Chat
+        </button>
+      </div>
+
+
+      <div class="card">
+        <div class="character-avatar">N</div>
+
+        <h3>Nila</h3>
+
+        <p>
+          Friendly, playful and emotionally expressive.
+        </p>
+
+        <button onclick="openChat('Nila')">
+          Start Chat
+        </button>
+      </div>
+
+
+      <div class="card">
+        <div class="character-avatar">M</div>
+
+        <h3>Maya</h3>
+
+        <p>
+          Calm, charming and conversation-focused.
+        </p>
+
+        <button onclick="openChat('Maya')">
+          Start Chat
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CHAT DEMO -->
+  <section class="demo">
+
+    <div class="chat-box">
+
+      <div class="chat-header">
+
+        <div class="character-avatar"
+             style="width:42px;height:42px;border-radius:12px;margin:0;font-size:18px;">
+          C
+        </div>
+
+        <div>
+          <div class="chat-name" id="characterName">
+            Chandona
+          </div>
+
+          <div class="chat-status">
+            <span class="online"
+                  style="display:inline-block;margin-right:5px;"></span>
+            Online
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="messages" id="messages">
+
+        <div class="message ai">
+          Hello ❤️ I'm Chandona. It's nice to meet you.
+        </div>
+
+        <div class="message user">
+          Hi! How are you?
+        </div>
+
+        <div class="message ai">
+          I'm doing well. Tell me about your day. ✨
+        </div>
+
+      </div>
+
+
+      <div class="chat-input">
+
+        <input
+          id="messageInput"
+          type="text"
+          placeholder="Write a message..."
+          onkeydown="handleEnter(event)"
+        >
+
+        <button onclick="sendMessage()">
+          Send
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PREMIUM -->
+  <section class="premium">
+
+    <div class="premium-box">
+
+      <div>
+        <h2>Unlock the full experience</h2>
+
+        <p>
+          Premium characters, longer conversations and
+          additional romantic experiences.
+        </p>
+      </div>
+
+      <button class="premium-btn" onclick="showPremium()">
+        View Premium
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 BlurryVision AI · Demo Version
+  </footer>
+
+</div>
+
+
+<!-- PREMIUM MODAL -->
+<div class="modal" id="premiumModal">
+
+  <div class="modal-box">
+
+    <h2>Premium is coming soon</h2>
+
+    <p>
+      This is currently a demo website.
+      Payment providers and the real premium system
+      can be connected later through a secure backend.
+    </p>
+
+    <button class="close-btn" onclick="closePremium()">
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  /* CHARACTER SELECTION */
+
+  function openChat(name) {
+
+    document.getElementById("characterName").innerText = name;
+
+    const messages = document.getElementById("messages");
+
+    messages.innerHTML = `
+      <div class="message ai">
+        Hello ❤️ I'm ${name}. It's nice to meet you.
+      </div>
+
+      <div class="message ai">
+        What would you like to talk about today? ✨
+      </div>
+    `;
+
+    document.getElementById("messageInput").focus();
+
+    window.scrollTo({
+      top: document.querySelector(".demo").offsetTop - 70,
+      behavior: "smooth"
+    });
+  }
+
+
+  /* DEMO MESSAGE */
+
+  function sendMessage() {
+
+    const input = document.getElementById("messageInput");
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    const messages = document.getElementById("messages");
+
+    const userMessage = document.createElement("div");
+
+    userMessage.className = "message user";
+    userMessage.innerText = text;
+
+    messages.appendChild(userMessage);
+
+    input.value = "";
+
+    setTimeout(() => {
+
+      const aiMessage = document.createElement("div");
+
+      aiMessage.className = "message ai";
+
+      aiMessage.innerText =
+        "Thanks for sharing that ❤️ This is a frontend demo. The real AI response system can be connected to a backend later.";
+
+      messages.appendChild(aiMessage);
+
+      messages.scrollTop = messages.scrollHeight;
+
+    }, 600);
+  }
+
+
+  function handleEnter(event) {
+
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+
+  }
+
+
+  /* PREMIUM */
+
+  function showPremium() {
+
+    document
+      .getElementById("premiumModal")
+      .classList.add("show");
+
+  }
+
+
+  function closePremium() {
+
+    document
+      .getElementById("premiumModal")
+      .classList.remove("show");
+
+  }
+
+</script>
+
+</body>
+</html>
