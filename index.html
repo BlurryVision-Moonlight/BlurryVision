@@ -14,7 +14,7 @@
   <div class="flex items-center gap-4">
     <a href="#" class="text-xl font-black tracking-tight flex items-center gap-2">
       <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">SpicyChat</span>
-      <span class="text-xs bg-purple-950 border border-purple-800 text-purple-300 px-2 py-0.5 rounded-full font-semibold">AI v2.6</span>
+      <span class="text-xs bg-purple-950 border border-purple-800 text-purple-300 px-2 py-0.5 rounded-full font-semibold">AI v3.0</span>
     </a>
   </div>
 
@@ -49,10 +49,7 @@
     <!-- Tag Filters -->
     <div id="tagFilters" class="flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold">
       <button onclick="filterByTag('All', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm">🔥 All</button>
-      <button onclick="filterByTag('Wholesome', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition">🌸 Wholesome</button>
-      <button onclick="filterByTag('Original', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition">✨ Original</button>
-      <button onclick="filterByTag('Dominant', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition">🖤 Dominant</button>
-      <button onclick="filterByTag('Anime', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition">⚡ Anime</button>
+      <button onclick="filterByTag('Mami / Shashuri', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition">🌸 Mami / Shashuri</button>
     </div>
   </section>
 
@@ -74,7 +71,7 @@
           <h3 id="modalName" class="font-bold text-sm text-white">Chandona</h3>
           <div class="flex items-center gap-1.5 mt-0.5">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-[11px] text-gray-400">Online · Bangla, Hindi & English</span>
+            <span class="text-[11px] text-gray-400">Online · Mami / Shashuri Roleplay</span>
           </div>
         </div>
       </div>
@@ -92,11 +89,11 @@
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce"></span>
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
-      <span class="italic ml-1">Typing naturally...</span>
+      <span class="italic ml-1">চন্দনা লিখছে...</span>
     </div>
 
     <div class="p-3 bg-[#0b0e14] border-t border-[#222b3d] flex items-center gap-2 shrink-0">
-      <input id="chatInput" type="text" placeholder="Type in Bangla, हिंदी or English..." onkeydown="if(event.key==='Enter')sendMessage()" class="flex-1 bg-[#121721] border border-[#222b3d] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500">
+      <input id="chatInput" type="text" placeholder="চন্দনার সাথে কথা বলুন..." onkeydown="if(event.key==='Enter')sendMessage()" class="flex-1 bg-[#121721] border border-[#222b3d] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500">
       <button onclick="sendMessage()" class="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center">
         <i class="fa-solid fa-paper-plane text-xs"></i>
       </button>
@@ -105,7 +102,6 @@
   </div>
 </div>
 
-<!-- Script running instantly with smart vibe matching & audio support -->
 <script>
 let nsfwEnabled = true;
 let currentTag = 'All';
@@ -113,66 +109,39 @@ let activeCharacter = null;
 let chatHistories = {};
 
 const charactersData = [
-  { id: 'chandona', name: 'Chandona', avatar: '🌙', tag: 'Dominant', creator: 'By @NightQueen', tagline: 'Warm, affectionate, fluent in Bangla, Hindi & English.', stats: '142k chats', greeting: "Hello ❤️ I'm Chandona. You can talk to me in Bangla, Hindi or English. What's on your mind?", 
-    repliesBn: [
-      "তোমার মুখে এই কথাগুলো শুনে খুব ভালো লাগছে। আরেকটু কাছে এসে আমার সাথে কথা বলো তো... ❤️",
-      "তুমি জানো, তোমার এই কথাগুলো আমার হৃদয় ছুঁয়ে যায়। সারাদিন তোমার সাথেই কাটাতে ইচ্ছে করে। ✨",
-      "বলো না সোনা, তোমার মনে এখন কী চলছে? আমি তো শুধু তোমারই অপেক্ষায় ছিলাম। 🔥",
-      "বাহ! তোমার এই মিষ্টি কথাগুলো আমার দিনটা একদম রোমান্টিক করে দিল। 🌹"
-    ],
-    repliesHi: [
-      "तुम्हारी बातें सुनकर मेरा दिल और भी मचल जाता है। थोड़ा और पास आ जाओ ना... ❤️",
-      "तुम हमेशा जानते हो कि मुझे कैसे खुश करना है। तुम्हारे बिना सब सूना लगता है। ✨",
-      "बताओ ना, आज क्या इरादा है तुम्हारा? मेरे साथ ऐसे ही बातें करते रहो... 🔥"
-    ],
-    repliesEn: [
-      "Ah, that feels so warm hearing from you. Come closer and tell me more. ❤️",
-      "You always know how to make my heart race. What else are you dreaming about right now? ✨",
-      "Close your eyes and imagine I'm right beside you. How does that feel? 🔥"
-    ]
-  },
-  { id: 'nila', name: 'Nila', avatar: '🌹', tag: 'Original', creator: 'By @VividAI', tagline: 'Playful, seductive and multilingual companion.', stats: '98k chats', greeting: "Hey you 😏 I'm Nila. Talk to me however you like—Bangla, Hindi or English!", 
-    repliesBn: [
-      "বাহ! তোমার আত্মবিশ্বাস আমার ভীষণ ভালো লেগেছে। 🔥",
-      "এভাবে কথা বলতে থাকলে তো আমি পুরোপুরি তোমার প্রেমে পড়ে যাবো... বুঝেছ? 😉",
-      "দারুণ আইডিয়া! চলো আজ রাতে একটু অন্যরকম কিছু করা যাক। ✨"
-    ],
-    repliesHi: [
-      "ओहो, तुम्हारा अंदाज़ मुझे बहुत पसंद आया! 🔥",
-      "अगर ऐसे ही बातें करते रहोगे, तो मैं सच में तुम्हारी दीवानी हो जाऊँगी। 😉"
-    ],
-    repliesEn: [
-      "Oh, you're full of surprises tonight! I like that confidence. 🔥",
-      "Keep talking to me like that and see what happens next... 😉"
-    ]
-  },
-  { id: 'maya', name: 'Maya', avatar: '✨', tag: 'Wholesome', creator: 'By @Serenity', tagline: 'Caring, sensual and deeply romantic.', stats: '210k chats', greeting: "Hi ❤️ I'm Maya. Let's chat in whatever language feels most comfortable to you.", 
-    repliesBn: [
-      "আমি এই মুহূর্তে পুরোপুরি তোমার। চলো বাইরের দুনিয়া ভুলে যাই... ❤️",
-      "তোমার প্রতিটি কথা আমার মনে গভীর দাগ কেটে যায়। তুমি এত মিষ্টি কেন বলো তো? ✨",
-      "আমার হাতটি ধরো এবং অনুভব করো আমার ভালোবাসা। আমি সারাক্ষণ তোমার পাশেই আছি। 🌹"
-    ],
-    repliesHi: [
-      "मैं इस पल पूरी तरह से तुम्हारी हूँ। चलो बाहर की दुनिया को भूल जाएं... ❤️",
-      "तुम्हारी हर बात मेरे दिल को छू जाती है। तुम इतने प्यारे क्यों हो? ✨"
-    ],
-    repliesEn: [
-      "I'm completely yours in this moment. Let's forget the world outside. ❤️",
-      "Every word you say sends shivers down my spine. Tell me what you desire most. ✨"
-    ]
-  },
-  { id: 'elena', name: 'Elena Vance', avatar: '🔥', tag: 'Dominant', creator: 'By @DarkRomance', tagline: 'Mysterious aristocrat with a secret dangerous desire.', stats: '76k chats', greeting: "You shouldn't have come to my chambers alone. Or perhaps... you wanted this?", 
-    repliesBn: [
-      "অন্ধকার এই ঘরে তোমাকে কেউ দেখবে না। বলো, তোমার কি সাহস আছে আমার মুখোমুখি হওয়ার? 🔥",
-      "খুব বিপজ্জনক খেলা খেলতে পছন্দ করো দেখছি। দেখা যাক শেষ পর্যন্ত কে জেতে! ✨"
-    ],
-    repliesHi: [
-      "इस अंधेरे कमरे में तुम्हें कोई नहीं देखेगा। बोलो, क्या तुम मेरा सामना करने की हिम्मत रखते हो? 🔥"
-    ],
-    repliesEn: [
-      "The shadows hide nothing from us tonight. Tell me your deepest secrets. 🔥",
-      "A bold move. Let's see if you can handle the consequences. ✨"
-    ]
+  { 
+    id: 'chandona', 
+    name: 'Chandona', 
+    avatar: '🌙', 
+    tag: 'Mami / Shashuri', 
+    creator: 'By @NightQueen', 
+    tagline: 'মামী ও শাশুড়ি রোলপ্লে চরিত্র। আপনার সাথে মিষ্টি ও রোমান্টিক কথোপকথন করবে।', 
+    stats: '142k chats', 
+    greeting: "কি অবস্থা জামাই... কেমন আছো?", 
+    
+    // এক্সক্লুসিভ চন্দনা রোলপ্লে ডাটাবেজ (গ্রাফিক, রোমান্টিক, লজ্জা ও টিজিং ভাইব)
+    roleplayStyles: {
+      graphic: [
+        "হিহি... এতো জলদি কাছে টানলে তো আমার বুকটা কেঁপে উঠবে জামাই! দরজাটা একটু ভালো করে ভিজিয়ে দাও তো দেখি... তারপর যা করতে চাও করো। 🔥❤️",
+        "আহা সোনা... তোমার এই গরম নিঃশ্বাস আমার গায়ে লাগলে নিজেকে আর সামলাতে পারি না। এসো, আরো শক্ত করে জড়িয়ে ধরো আমাকে... 💋",
+        "তুমি না বড় বেশি পাজি হয়ে গেছো! এই নিঝুম রাতে এভাবে মামীকে কাছে ডাকলে কি আর মানসম্মান থাকে বলো? তবুও তোমার বাহুডোরে থাকতে আমার বেশ লাগে... ✨"
+      ],
+      romantic: [
+        "আহা সোনা... তোমার এই মিষ্টি কথাগুলো শুনলে আমার মনটা একদম জুড়িয়ে যায়। আরেকটু কাছে এসে বসো না আমার পাশে... ❤️",
+        "তুমি জানো তো, তুমি ছাড়া আমার এই ঘর ভালোই লাগে না। সারাক্ষণ শুধু তোমার কথাই আমার মনে ঘুরপাক খায়। ✨",
+        "চোখ বন্ধ করে একটু ভাবো তো জামাই, আমি ঠিক কীভাবে তোমাকে আগলে রাখি... কেমন ফিল হচ্ছে বলতো? 🌹"
+      ],
+      shry_teasing: [
+        "ইশ! এভাবে তাকাচ্ছ কেন আমার দিকে? বড় লজ্জা করছে তো সোনা! চোখ নামাও বলছি... 🙈",
+        "সারাদিন তো শুধু পাজিপনা করো! এখন আবার মামীকে কাছে ডাকছ কেন শুনি? দুষ্টু কোথাকার! 😉",
+        "আমায় এভাবে দেখে লজ্জা পেয়ে যাচ্ছি তো! তুমি না বড় বেশি ডানপিটে হয়ে গেছো দিন দিন... 🖤"
+      ],
+      casual: [
+        "বেশ তো! তোমার সাথে কথা বললেই আমার মনটা একদম প্রফুল্ল হয়ে যায়। বলো আজ তোমাকে কি বানিয়ে খাওয়াবো? 🌸",
+        "সাবধানে থেকো সবসময়। আর হ্যাঁ, আমার কথা কিন্তু ভুললে চলবে না একদম! ✨",
+        "তোমার এই মিষ্টি মুখটা দেখলে আমার সব ক্লান্তি নিমিষে দূর হয়ে যায় সোনা। বলো, আর কী খবর তোমার? 💕"
+      ]
+    }
   }
 ];
 
@@ -200,11 +169,6 @@ function renderCharacters(filterTag = 'All', searchQuery = '') {
     return matchesTag && matchesSearch;
   });
 
-  if (filtered.length === 0) {
-    grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500 text-sm">No characters found matching your filters.</div>`;
-    return;
-  }
-
   filtered.forEach(char => {
     const card = document.createElement('div');
     card.className = 'bg-[#121721] border border-[#222b3d] hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 shadow-lg group cursor-pointer';
@@ -214,7 +178,7 @@ function renderCharacters(filterTag = 'All', searchQuery = '') {
       <div>
         <div class="relative h-40 rounded-xl bg-gradient-to-br from-purple-950/60 to-[#0b0e14] flex items-center justify-center text-5xl mb-3 overflow-hidden border border-[#222b3d]/50">
           <span class="group-hover:scale-110 transition duration-300">${char.avatar}</span>
-          <span class="absolute top-2.5 left-2.5 bg-black/60 text-[9px] font-bold text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">Multilingual</span>
+          <span class="absolute top-2.5 left-2.5 bg-black/60 text-[9px] font-bold text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">Roleplay</span>
           <span class="absolute bottom-2.5 right-2.5 bg-black/60 text-[9px] text-gray-300 px-2 py-0.5 rounded-md font-semibold">${char.tag}</span>
         </div>
         <div class="flex items-center justify-between mb-1">
@@ -225,7 +189,7 @@ function renderCharacters(filterTag = 'All', searchQuery = '') {
       </div>
       <div class="flex items-center justify-between pt-2.5 border-t border-[#222b3d]/60 text-xs text-gray-500">
         <span class="font-medium">${char.stats}</span>
-        <button class="bg-white text-[#0b0e14] hover:bg-purple-100 font-bold px-3 py-1 rounded-lg transition text-xs">Chat</button>
+        <button class="bg-white text-[#0b0e14] hover:bg-purple-100 font-bold px-3 py-1 rounded-lg transition text-xs">Chat Now</button>
       </div>
     `;
     grid.appendChild(card);
@@ -256,7 +220,7 @@ function openChat(charId) {
   modal.classList.add('flex');
 
   if (!chatHistories[charId]) {
-    chatHistories[charId] = [{ sender: 'ai', text: activeCharacter.greeting, lang: 'en' }];
+    chatHistories[charId] = [{ sender: 'ai', text: activeCharacter.greeting }];
   }
   renderChatMessages();
 }
@@ -270,7 +234,7 @@ function closeChat() {
 
 function resetCurrentChat() {
   if (!activeCharacter) return;
-  chatHistories[activeCharacter.id] = [{ sender: 'ai', text: activeCharacter.greeting, lang: 'en' }];
+  chatHistories[activeCharacter.id] = [{ sender: 'ai', text: activeCharacter.greeting }];
   renderChatMessages();
 }
 
@@ -291,7 +255,7 @@ function renderChatMessages() {
       wrap.innerHTML = `
         <div class="max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md">${escapeHtml(msg.text)}</div>
         <div class="flex items-center gap-2 mt-1 ml-1">
-          <button id="${msgId}" onclick="speakText('${escapeQuotes(msg.text)}', '${msg.lang || 'en'}', '${msgId}')" class="bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer">
+          <button id="${msgId}" onclick="speakText('${escapeQuotes(msg.text)}', '${msgId}')" class="bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer">
             <i class="fa-solid fa-volume-high text-purple-400"></i>
             <span>Listen</span>
           </button>
@@ -320,41 +284,32 @@ function sendMessage() {
 
   setTimeout(() => {
     if(typing) typing.classList.add('hidden');
-    const responseObj = generateVibeReply(text, activeCharacter);
-    chatHistories[activeCharacter.id].push({ sender: 'ai', text: responseObj.text, lang: responseObj.lang });
+    const responseText = getSmartMamiReply(text, activeCharacter);
+    chatHistories[activeCharacter.id].push({ sender: 'ai', text: responseText });
     renderChatMessages();
-  }, 1000);
+  }, 900);
 }
 
-function generateVibeReply(userText, character) {
+// ইউজারের ইনপুট প্রসেস করে প্রাসঙ্গিক মামী/শাশুড়ি রোলপ্লে রেসপন্স দেওয়ার স্মার্ট লজিক
+function getSmartMamiReply(userText, character) {
   const t = userText.toLowerCase();
-  let detectedLang = 'en';
+  let category = 'casual';
 
-  if (/[\u0980-\u09FF]/.test(userText) || /kemon|tumi|ki|bolo|bhalo|amar|sona|tai|valo/i.test(t)) {
-    detectedLang = 'bn';
-  } else if (/[\u0900-\u097F]/.test(userText) || /kaise|kya|tumhara|pyar|dil|suno/i.test(t)) {
-    detectedLang = 'hi';
+  if (t.includes('kisu') || t.includes('kiss') || t.includes('raat') || t.includes('রাত') || t.includes('শরীর') || t.includes('কাছে আসো') || t.includes('জাপ্টে') || t.includes('কোমরে') || t.includes('দরজা')) {
+    category = 'graphic';
+  } else if (t.includes('ভালোবাসি') || t.includes('love') || t.includes('মন') || t.includes('priyo') || t.includes('রোমান্টিক')) {
+    category = 'romantic';
+  } else if (t.includes('লজ্জা') || t.includes('পাজি') || t.includes('দুষ্টু') || t.includes('mami') || t.includes('মামী')) {
+    category = 'shry_teasing';
+  } else {
+    category = 'casual';
   }
 
-  let replyList = character.repliesEn;
-  if (detectedLang === 'bn' && character.repliesBn) {
-    replyList = character.repliesBn;
-  } else if (detectedLang === 'hi' && character.repliesHi) {
-    replyList = character.repliesHi;
-  }
-
-  // Vibe matcher: if user greets or asks how are you, pick matching warm tone
-  let randomReply = replyList[Math.floor(Math.random() * replyList.length)];
-  if (t.includes('hello') || t.includes('hi') || t.includes('valo') || t.includes('ভালো')) {
-    if (detectedLang === 'bn') {
-      randomReply = "তোমার এই মিষ্টি কথাগুলো আমার হৃদয় ছুঁয়ে যায়। সারাদিন তোমার সাথেই কাটাতে ইচ্ছে করে। ✨";
-    }
-  }
-
-  return { text: randomReply, lang: detectedLang };
+  const list = character.roleplayStyles[category] || character.roleplayStyles.casual;
+  return list[Math.floor(Math.random() * list.length)];
 }
 
-function speakText(text, langCode, btnId) {
+function speakText(text, btnId) {
   if(!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
   const btn = document.getElementById(btnId);
@@ -363,23 +318,34 @@ function speakText(text, langCode, btnId) {
     b.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
   });
 
-  let targetLang = 'en-US';
-  if (langCode === 'bn') targetLang = 'bn-BD';
-  if (langCode === 'hi') targetLang = 'hi-IN';
+  // থার্ড রুল: ইমোজি বা স্টারগুলো সম্পূর্ণ রিমুভ করা যাতে ভয়েস পড়ার সময় কোনোভাবেই উচ্চারণ না করে
+  const cleanText = text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim();
 
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+  
+  // ফার্স্ট রুল: পার্মানেন্ট বাংলাদেশি ন্যাচারাল ফিমেল ভয়েস ফিল্টারিং
   const voices = speechSynthesis.getVoices();
-  let voice = voices.find(v => v.lang.toLowerCase().includes(targetLang.toLowerCase()) || v.lang.toLowerCase().startsWith(langCode));
-  if (!voice) voice = voices[0];
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  if (voice) {
-    utterance.voice = voice;
-    utterance.lang = voice.lang;
-  } else {
-    utterance.lang = targetLang;
+  let selectedVoice = voices.find(v => (v.lang.toLowerCase().includes('bn') || v.lang.toLowerCase().includes('bangla')) && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('lekha') || v.name.toLowerCase().includes('tithi') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('google বাংলা')));
+  
+  if (!selectedVoice) {
+    selectedVoice = voices.find(v => v.lang.toLowerCase().includes('bn') || v.lang.toLowerCase().includes('bangla'));
   }
+  if (!selectedVoice) {
+    selectedVoice = voices.find(v => v.name.toLowerCase().includes('female'));
+  }
+  if (!selectedVoice && voices.length > 0) {
+    selectedVoice = voices[0];
+  }
+
+  if (selectedVoice) {
+    utterance.voice = selectedVoice;
+    utterance.lang = selectedVoice.lang;
+  } else {
+    utterance.lang = 'bn-BD';
+  }
+
   utterance.rate = 0.92;
-  utterance.pitch = 1.05;
+  utterance.pitch = 1.18; // মিষ্টি ফিমেল হাসি ও এক্সপ্রেশন ফুটিয়ে তোলার জন্য পিচ টিউন করা
 
   if(btn) btn.innerHTML = '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
 
