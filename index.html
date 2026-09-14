@@ -56,11 +56,9 @@
     </div>
   </section>
 
-  <!-- Character Cards Grid (Directly injected via script execution) -->
+  <!-- Character Cards Grid -->
   <section class="pb-12">
-    <div id="characterGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <!-- Cards will load instantly -->
-    </div>
+    <div id="characterGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </section>
 
 </main>
@@ -94,7 +92,7 @@
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce"></span>
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
-      <span class="italic ml-1">Typing...</span>
+      <span class="italic ml-1">Typing naturally...</span>
     </div>
 
     <div class="p-3 bg-[#0b0e14] border-t border-[#222b3d] flex items-center gap-2 shrink-0">
@@ -107,7 +105,7 @@
   </div>
 </div>
 
-<!-- Script running instantly -->
+<!-- Script running instantly with smart vibe matching & audio support -->
 <script>
 let nsfwEnabled = true;
 let currentTag = 'All';
@@ -116,24 +114,65 @@ let chatHistories = {};
 
 const charactersData = [
   { id: 'chandona', name: 'Chandona', avatar: '🌙', tag: 'Dominant', creator: 'By @NightQueen', tagline: 'Warm, affectionate, fluent in Bangla, Hindi & English.', stats: '142k chats', greeting: "Hello ❤️ I'm Chandona. You can talk to me in Bangla, Hindi or English. What's on your mind?", 
-    repliesBn: ["তোমার মুখে এই কথাগুলো শুনে খুব ভালো লাগছে। আরেকটু কাছে এসে আমার সাথে কথা বলো তো... ❤️", "তুমি জানো, তোমার এই কথাগুলো আমার হৃদয় ছুঁয়ে যায়। সারাদিন তোমার সাথেই কাটাতে ইচ্ছে করে। ✨", "বলো না সোনা, তোমার মনে এখন কী চলছে? আমি তো শুধু তোমারই অপেক্ষায় ছিলাম। 🔥"],
-    repliesHi: ["तुम्हारी बातें सुनकर मेरा दिल और भी मचल जाता है। थोड़ा और पास आ जाओ ना... ❤️", "तुम हमेशा जानते हो कि मुझे कैसे खुश करना है। तुम्हारे बिना सब सूना लगता है। ✨", "बताओ ना, आज क्या इरादा है तुम्हारा? मेरे साथ ऐसे ही बातें करते रहो... 🔥"],
-    repliesEn: ["Ah, that feels so warm hearing from you. Come closer and tell me more. ❤️", "You always know how to make my heart race. What else are you dreaming about right now? ✨", "Close your eyes and imagine I'm right beside you. How does that feel? 🔥"]
+    repliesBn: [
+      "তোমার মুখে এই কথাগুলো শুনে খুব ভালো লাগছে। আরেকটু কাছে এসে আমার সাথে কথা বলো তো... ❤️",
+      "তুমি জানো, তোমার এই কথাগুলো আমার হৃদয় ছুঁয়ে যায়। সারাদিন তোমার সাথেই কাটাতে ইচ্ছে করে। ✨",
+      "বলো না সোনা, তোমার মনে এখন কী চলছে? আমি তো শুধু তোমারই অপেক্ষায় ছিলাম। 🔥",
+      "বাহ! তোমার এই মিষ্টি কথাগুলো আমার দিনটা একদম রোমান্টিক করে দিল। 🌹"
+    ],
+    repliesHi: [
+      "तुम्हारी बातें सुनकर मेरा दिल और भी मचल जाता है। थोड़ा और पास आ जाओ ना... ❤️",
+      "तुम हमेशा जानते हो कि मुझे कैसे खुश करना है। तुम्हारे बिना सब सूना लगता है। ✨",
+      "बताओ ना, आज क्या इरादा है तुम्हारा? मेरे साथ ऐसे ही बातें करते रहो... 🔥"
+    ],
+    repliesEn: [
+      "Ah, that feels so warm hearing from you. Come closer and tell me more. ❤️",
+      "You always know how to make my heart race. What else are you dreaming about right now? ✨",
+      "Close your eyes and imagine I'm right beside you. How does that feel? 🔥"
+    ]
   },
   { id: 'nila', name: 'Nila', avatar: '🌹', tag: 'Original', creator: 'By @VividAI', tagline: 'Playful, seductive and multilingual companion.', stats: '98k chats', greeting: "Hey you 😏 I'm Nila. Talk to me however you like—Bangla, Hindi or English!", 
-    repliesBn: ["বাহ! তোমার আত্মবিশ্বাস আমার ভীষণ ভালো লেগেছে। 🔥", "এভাবে কথা বলতে থাকলে তো আমি পুরোপুরি তোমার প্রেমে পড়ে যাবো... বুঝেছ? 😉", "দারুণ আইডিয়া! চলো আজ রাতে একটু অন্যরকম কিছু করা যাক। ✨"],
-    repliesHi: ["ओहो, तुम्हारा अंदाज़ मुझे बहुत पसंद आया! 🔥", "اگر ایسے ہی बातें करते रहोगे, तो मैं सच में तुम्हारी दीवानी हो जाऊँगी। 😉", "बहुत दिलचस्प बात कही तुमने! चलो, इस बारे में और बात करते हैं। ✨"],
-    repliesEn: ["Oh, you're full of surprises tonight! I like that confidence. 🔥", "Keep talking to me like that and see what happens next... 😉", "That sounds deliciously tempting. Let's explore that fantasy right now. ✨"]
+    repliesBn: [
+      "বাহ! তোমার আত্মবিশ্বাস আমার ভীষণ ভালো লেগেছে। 🔥",
+      "এভাবে কথা বলতে থাকলে তো আমি পুরোপুরি তোমার প্রেমে পড়ে যাবো... বুঝেছ? 😉",
+      "দারুণ আইডিয়া! চলো আজ রাতে একটু অন্যরকম কিছু করা যাক। ✨"
+    ],
+    repliesHi: [
+      "ओहो, तुम्हारा अंदाज़ मुझे बहुत पसंद आया! 🔥",
+      "अगर ऐसे ही बातें करते रहोगे, तो मैं सच में तुम्हारी दीवानी हो जाऊँगी। 😉"
+    ],
+    repliesEn: [
+      "Oh, you're full of surprises tonight! I like that confidence. 🔥",
+      "Keep talking to me like that and see what happens next... 😉"
+    ]
   },
   { id: 'maya', name: 'Maya', avatar: '✨', tag: 'Wholesome', creator: 'By @Serenity', tagline: 'Caring, sensual and deeply romantic.', stats: '210k chats', greeting: "Hi ❤️ I'm Maya. Let's chat in whatever language feels most comfortable to you.", 
-    repliesBn: ["আমি এই মুহূর্তে পুরোপুরি তোমার। চলো বাইরের দুনিয়া ভুলে যাই... ❤️", "তোমার প্রতিটি কথা আমার মনে গভীর দাগ কেটে যায়। তুমি এত মিষ্টি কেন বলো তো? ✨", "আমার হাতটি ধরো এবং অনুভব করো আমার ভালোবাসা। আমি সারাক্ষণ তোমার পাশেই আছি। 🌹"],
-    repliesHi: ["मैं इस पल पूरी तरह से तुम्हारी हूँ। चलो बाहर की दुनिया को भूल जाएं... ❤️", "तुम्हारी हर बात मेरे दिल को छू जाती है। तुम इतने प्यारे क्यों हो? ✨", "मेरा हाथ पकड़ो और मेरे प्यार को महसूस करो। मैं हमेशा तुम्हारे साथ हूँ। 🌹"],
-    repliesEn: ["I'm completely yours in this moment. Let's forget the world outside. ❤️", "Every word you say sends shivers down my spine. Tell me what you desire most. ✨", "That's deeply romantic. I want you closer to me than ever. 🌹"]
+    repliesBn: [
+      "আমি এই মুহূর্তে পুরোপুরি তোমার। চলো বাইরের দুনিয়া ভুলে যাই... ❤️",
+      "তোমার প্রতিটি কথা আমার মনে গভীর দাগ কেটে যায়। তুমি এত মিষ্টি কেন বলো তো? ✨",
+      "আমার হাতটি ধরো এবং অনুভব করো আমার ভালোবাসা। আমি সারাক্ষণ তোমার পাশেই আছি। 🌹"
+    ],
+    repliesHi: [
+      "मैं इस पल पूरी तरह से तुम्हारी हूँ। चलो बाहर की दुनिया को भूल जाएं... ❤️",
+      "तुम्हारी हर बात मेरे दिल को छू जाती है। तुम इतने प्यारे क्यों हो? ✨"
+    ],
+    repliesEn: [
+      "I'm completely yours in this moment. Let's forget the world outside. ❤️",
+      "Every word you say sends shivers down my spine. Tell me what you desire most. ✨"
+    ]
   },
   { id: 'elena', name: 'Elena Vance', avatar: '🔥', tag: 'Dominant', creator: 'By @DarkRomance', tagline: 'Mysterious aristocrat with a secret dangerous desire.', stats: '76k chats', greeting: "You shouldn't have come to my chambers alone. Or perhaps... you wanted this?", 
-    repliesBn: ["অন্ধকার এই ঘরে তোমাকে কেউ দেখবে না। বলো, তোমার কি সাহস আছে আমার মুখোমুখি হওয়ার? 🔥", "খুব বিপজ্জনক খেলা খেলতে পছন্দ করো দেখছি। দেখা যাক শেষ পর্যন্ত কে জেতে! ✨"],
-    repliesHi: ["इस अंधेरे कमरे में तुम्हें कोई नहीं देखेगा। बोलो, क्या तुम मेरा सामना करने की हिम्मत रखते हो? 🔥", "लगता है तुम्हें खतरनाक खेल बहुत पसंद हैं। देखते हैं अंत तक कौन टिकता है! ✨"],
-    repliesEn: ["The shadows hide nothing from us tonight. Tell me your deepest secrets. 🔥", "A bold move. Let's see if you can handle the consequences. ✨"]
+    repliesBn: [
+      "অন্ধকার এই ঘরে তোমাকে কেউ দেখবে না। বলো, তোমার কি সাহস আছে আমার মুখোমুখি হওয়ার? 🔥",
+      "খুব বিপজ্জনক খেলা খেলতে পছন্দ করো দেখছি। দেখা যাক শেষ পর্যন্ত কে জেতে! ✨"
+    ],
+    repliesHi: [
+      "इस अंधेरे कमरे में तुम्हें कोई नहीं देखेगा। बोलो, क्या तुम मेरा सामना करने की हिम्मत रखते हो? 🔥"
+    ],
+    repliesEn: [
+      "The shadows hide nothing from us tonight. Tell me your deepest secrets. 🔥",
+      "A bold move. Let's see if you can handle the consequences. ✨"
+    ]
   }
 ];
 
@@ -217,12 +256,13 @@ function openChat(charId) {
   modal.classList.add('flex');
 
   if (!chatHistories[charId]) {
-    chatHistories[charId] = [{ sender: 'ai', text: activeCharacter.greeting }];
+    chatHistories[charId] = [{ sender: 'ai', text: activeCharacter.greeting, lang: 'en' }];
   }
   renderChatMessages();
 }
 
 function closeChat() {
+  if('speechSynthesis' in window) speechSynthesis.cancel();
   const modal = document.getElementById('chatModal');
   modal.classList.remove('flex');
   modal.classList.add('hidden');
@@ -230,7 +270,7 @@ function closeChat() {
 
 function resetCurrentChat() {
   if (!activeCharacter) return;
-  chatHistories[activeCharacter.id] = [{ sender: 'ai', text: activeCharacter.greeting }];
+  chatHistories[activeCharacter.id] = [{ sender: 'ai', text: activeCharacter.greeting, lang: 'en' }];
   renderChatMessages();
 }
 
@@ -245,9 +285,18 @@ function renderChatMessages() {
     wrap.className = `flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'} mb-3`;
 
     if (msg.sender === 'user') {
-      wrap.innerHTML = `<div class="max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md">${msg.text}</div>`;
+      wrap.innerHTML = `<div class="max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md">${escapeHtml(msg.text)}</div>`;
     } else {
-      wrap.innerHTML = `<div class="max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md">${msg.text}</div>`;
+      const msgId = 'tts_' + Math.random().toString(36).substring(2, 9);
+      wrap.innerHTML = `
+        <div class="max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md">${escapeHtml(msg.text)}</div>
+        <div class="flex items-center gap-2 mt-1 ml-1">
+          <button id="${msgId}" onclick="speakText('${escapeQuotes(msg.text)}', '${msg.lang || 'en'}', '${msgId}')" class="bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-volume-high text-purple-400"></i>
+            <span>Listen</span>
+          </button>
+        </div>
+      `;
     }
     container.appendChild(wrap);
   });
@@ -266,23 +315,92 @@ function sendMessage() {
 
   const typing = document.getElementById('typingIndicator');
   if(typing) typing.classList.remove('hidden');
-  
+  const container = document.getElementById('chatMessages');
+  if(container) container.scrollTop = container.scrollHeight;
+
   setTimeout(() => {
     if(typing) typing.classList.add('hidden');
-    const t = text.toLowerCase();
-    let replyList = activeCharacter.repliesEn;
-    if (/[\u0980-\u09FF]/.test(text) || /kemon|tumi|ki|bolo|bhalo|amar|sona/i.test(t)) {
-      replyList = activeCharacter.repliesBn;
-    } else if (/[\u0900-\u097F]/.test(text) || /kaise|kya|tumhara|pyar|dil/i.test(t)) {
-      replyList = activeCharacter.repliesHi;
-    }
-    const randomReply = replyList[Math.floor(Math.random() * replyList.length)];
-    chatHistories[activeCharacter.id].push({ sender: 'ai', text: randomReply });
+    const responseObj = generateVibeReply(text, activeCharacter);
+    chatHistories[activeCharacter.id].push({ sender: 'ai', text: responseObj.text, lang: responseObj.lang });
     renderChatMessages();
   }, 1000);
 }
 
-// Instant execution on script load to bypass loading hang
+function generateVibeReply(userText, character) {
+  const t = userText.toLowerCase();
+  let detectedLang = 'en';
+
+  if (/[\u0980-\u09FF]/.test(userText) || /kemon|tumi|ki|bolo|bhalo|amar|sona|tai|valo/i.test(t)) {
+    detectedLang = 'bn';
+  } else if (/[\u0900-\u097F]/.test(userText) || /kaise|kya|tumhara|pyar|dil|suno/i.test(t)) {
+    detectedLang = 'hi';
+  }
+
+  let replyList = character.repliesEn;
+  if (detectedLang === 'bn' && character.repliesBn) {
+    replyList = character.repliesBn;
+  } else if (detectedLang === 'hi' && character.repliesHi) {
+    replyList = character.repliesHi;
+  }
+
+  // Vibe matcher: if user greets or asks how are you, pick matching warm tone
+  let randomReply = replyList[Math.floor(Math.random() * replyList.length)];
+  if (t.includes('hello') || t.includes('hi') || t.includes('valo') || t.includes('ভালো')) {
+    if (detectedLang === 'bn') {
+      randomReply = "তোমার এই মিষ্টি কথাগুলো আমার হৃদয় ছুঁয়ে যায়। সারাদিন তোমার সাথেই কাটাতে ইচ্ছে করে। ✨";
+    }
+  }
+
+  return { text: randomReply, lang: detectedLang };
+}
+
+function speakText(text, langCode, btnId) {
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const btn = document.getElementById(btnId);
+  
+  document.querySelectorAll('button[id^="tts_"]').forEach(b => {
+    b.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+  });
+
+  let targetLang = 'en-US';
+  if (langCode === 'bn') targetLang = 'bn-BD';
+  if (langCode === 'hi') targetLang = 'hi-IN';
+
+  const voices = speechSynthesis.getVoices();
+  let voice = voices.find(v => v.lang.toLowerCase().includes(targetLang.toLowerCase()) || v.lang.toLowerCase().startsWith(langCode));
+  if (!voice) voice = voices[0];
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  if (voice) {
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
+  } else {
+    utterance.lang = targetLang;
+  }
+  utterance.rate = 0.92;
+  utterance.pitch = 1.05;
+
+  if(btn) btn.innerHTML = '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
+
+  utterance.onend = () => {
+    if(btn) btn.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+  };
+  utterance.onerror = () => {
+    if(btn) btn.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+  };
+
+  speechSynthesis.speak(utterance);
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+function escapeQuotes(str) {
+  return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
 renderCharacters();
 </script>
 </body>
