@@ -9,61 +9,66 @@
 </head>
 <body class="bg-[#0b0e14] text-gray-100 font-sans min-h-screen flex flex-col">
 
-<!-- Top Navigation Bar -->
 <header class="sticky top-0 z-40 bg-[#0b0e14]/90 backdrop-blur-md border-b border-[#222b3d] px-4 lg:px-8 h-16 flex items-center justify-between">
   <div class="flex items-center gap-4">
     <a href="#" class="text-xl font-black tracking-tight flex items-center gap-2">
       <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">SpicyChat</span>
-      <span class="text-xs bg-purple-950 border border-purple-800 text-purple-300 px-2 py-0.5 rounded-full font-semibold">AI v3.0</span>
+      <span class="text-xs bg-purple-950 border border-purple-800 text-purple-300 px-2 py-0.5 rounded-full font-semibold">AI v4.0</span>
     </a>
   </div>
-
   <div class="flex items-center gap-3">
+    <!-- API Key Button -->
+    <button onclick="openApiKeyModal()" class="bg-[#121721] border border-[#222b3d] hover:border-purple-500 text-gray-300 text-xs px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition">
+      <i class="fa-solid fa-key text-purple-400"></i>
+      <span class="hidden sm:inline">API Key</span>
+    </button>
     <div class="flex items-center gap-1.5 bg-[#121721] border border-[#222b3d] px-2.5 py-1.5 rounded-full">
       <span class="text-[11px] font-bold text-pink-400 tracking-wider">NSFW</span>
-      <button id="nsfwToggle" onclick="toggleNsfw()" class="w-8 h-4.5 bg-pink-600 rounded-full relative transition flex items-center px-0.5 cursor-pointer">
+      <button id="nsfwToggle" onclick="toggleNsfw()" aria-label="Toggle NSFW" class="w-8 h-4.5 bg-pink-600 rounded-full relative transition flex items-center px-0.5 cursor-pointer">
         <div id="nsfwThumb" class="w-3.5 h-3.5 bg-white rounded-full transition-transform transform translate-x-3.5"></div>
       </button>
     </div>
-    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center font-bold text-xs text-white shadow">
-      DF
-    </div>
+    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center font-bold text-xs text-white shadow">DF</div>
   </div>
 </header>
 
-<!-- Main Container -->
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex flex-col gap-6">
-
-  <!-- Header & Search -->
   <section class="flex flex-col gap-4">
     <div>
       <h1 class="text-2xl md:text-3xl font-black tracking-tight">Explore AI Characters</h1>
       <p class="text-sm text-gray-400 mt-1">Immerse yourself in dynamic, human-like conversations and multilingual roleplay.</p>
     </div>
-    
     <div class="relative w-full">
       <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
       <input id="searchInput" type="text" placeholder="Search characters..." oninput="filterCharacters()" class="w-full bg-[#121721] border border-[#222b3d] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition">
     </div>
-
-    <!-- Tag Filters -->
     <div id="tagFilters" class="flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold">
       <button onclick="filterByTag('All', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm">🔥 All</button>
       <button onclick="filterByTag('Mami / Shashuri', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition">🌸 Mami / Shashuri</button>
     </div>
   </section>
-
-  <!-- Character Cards Grid -->
   <section class="pb-12">
     <div id="characterGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </section>
-
 </main>
 
-<!-- Chat Modal -->
+<!-- API Key Input Modal -->
+<div id="apiKeyModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+  <div class="w-full max-w-md bg-[#121721] border border-[#222b3d] rounded-2xl p-6 flex flex-col gap-4 shadow-2xl">
+    <div class="flex items-center justify-between">
+      <h3 class="font-bold text-base text-white flex items-center gap-2">
+        <i class="fa-solid fa-key text-purple-400"></i> OpenRouter API Key
+      </h3>
+      <button onclick="closeApiKeyModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <p class="text-xs text-gray-400">আপনার OpenRouter API Key এখানে প্রদান করুন। এটি আপনার ব্রাউজারে সেভ থাকবে এবং নিরাপদ থাকবে।</p>
+    <input id="apiKeyInput" type="password" placeholder="sk-or-v1-..." class="w-full bg-[#0b0e14] border border-[#222b3d] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500">
+    <button onclick="saveApiKey()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 py-3 rounded-xl font-bold text-sm text-white shadow-lg transition">Save Key</button>
+  </div>
+</div>
+
 <div id="chatModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex-col justify-end md:items-center md:justify-center p-0 md:p-4">
   <div class="w-full h-full md:max-w-3xl md:h-[85vh] bg-[#121721] border border-[#222b3d] md:rounded-2xl flex flex-col overflow-hidden shadow-2xl">
-    
     <div class="h-16 px-4 bg-[#0b0e14] border-b border-[#222b3d] flex items-center justify-between shrink-0">
       <div class="flex items-center gap-3">
         <div id="modalAvatar" class="w-10 h-10 rounded-xl bg-purple-900 flex items-center justify-center text-xl">🌙</div>
@@ -82,289 +87,347 @@
         </button>
       </div>
     </div>
-
     <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
-
     <div id="typingIndicator" class="hidden px-4 py-2 text-xs text-gray-400 flex items-center gap-2">
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce"></span>
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
       <span class="italic ml-1">চন্দনা লিখছে...</span>
     </div>
-
     <div class="p-3 bg-[#0b0e14] border-t border-[#222b3d] flex items-center gap-2 shrink-0">
       <input id="chatInput" type="text" placeholder="চন্দনার সাথে কথা বলুন..." onkeydown="if(event.key==='Enter')sendMessage()" class="flex-1 bg-[#121721] border border-[#222b3d] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500">
-      <button onclick="sendMessage()" class="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center">
+      <button id="sendBtn" onclick="sendMessage()" class="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center">
         <i class="fa-solid fa-paper-plane text-xs"></i>
       </button>
     </div>
-
   </div>
 </div>
 
 <script>
+const API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
+const AI_MODEL = "deepseek/deepseek-chat"; 
+
 let nsfwEnabled = true;
-let currentTag = 'All';
+let currentTag = "All";
 let activeCharacter = null;
 let chatHistories = {};
+let requestInFlight = false;
 
-const charactersData = [
-  { 
-    id: 'chandona', 
-    name: 'Chandona', 
-    avatar: '🌙', 
-    tag: 'Mami / Shashuri', 
-    creator: 'By @NightQueen', 
-    tagline: 'মামী ও শাশুড়ি রোলপ্লে চরিত্র। আপনার সাথে মিষ্টি ও রোমান্টিক কথোপকথন করবে।', 
-    stats: '142k chats', 
-    greeting: "কি অবস্থা জামাই... কেমন আছো?", 
-    
-    // এক্সক্লুসিভ চন্দনা রোলপ্লে ডাটাবেজ (গ্রাফিক, রোমান্টিক, লজ্জা ও টিজিং ভাইব)
-    roleplayStyles: {
-      graphic: [
-        "হিহি... এতো জলদি কাছে টানলে তো আমার বুকটা কেঁপে উঠবে জামাই! দরজাটা একটু ভালো করে ভিজিয়ে দাও তো দেখি... তারপর যা করতে চাও করো। 🔥❤️",
-        "আহা সোনা... তোমার এই গরম নিঃশ্বাস আমার গায়ে লাগলে নিজেকে আর সামলাতে পারি না। এসো, আরো শক্ত করে জড়িয়ে ধরো আমাকে... 💋",
-        "তুমি না বড় বেশি পাজি হয়ে গেছো! এই নিঝুম রাতে এভাবে মামীকে কাছে ডাকলে কি আর মানসম্মান থাকে বলো? তবুও তোমার বাহুডোরে থাকতে আমার বেশ লাগে... ✨"
-      ],
-      romantic: [
-        "আহা সোনা... তোমার এই মিষ্টি কথাগুলো শুনলে আমার মনটা একদম জুড়িয়ে যায়। আরেকটু কাছে এসে বসো না আমার পাশে... ❤️",
-        "তুমি জানো তো, তুমি ছাড়া আমার এই ঘর ভালোই লাগে না। সারাক্ষণ শুধু তোমার কথাই আমার মনে ঘুরপাক খায়। ✨",
-        "চোখ বন্ধ করে একটু ভাবো তো জামাই, আমি ঠিক কীভাবে তোমাকে আগলে রাখি... কেমন ফিল হচ্ছে বলতো? 🌹"
-      ],
-      shry_teasing: [
-        "ইশ! এভাবে তাকাচ্ছ কেন আমার দিকে? বড় লজ্জা করছে তো সোনা! চোখ নামাও বলছি... 🙈",
-        "সারাদিন তো শুধু পাজিপনা করো! এখন আবার মামীকে কাছে ডাকছ কেন শুনি? দুষ্টু কোথাকার! 😉",
-        "আমায় এভাবে দেখে লজ্জা পেয়ে যাচ্ছি তো! তুমি না বড় বেশি ডানপিটে হয়ে গেছো দিন দিন... 🖤"
-      ],
-      casual: [
-        "বেশ তো! তোমার সাথে কথা বললেই আমার মনটা একদম প্রফুল্ল হয়ে যায়। বলো আজ তোমাকে কি বানিয়ে খাওয়াবো? 🌸",
-        "সাবধানে থেকো সবসময়। আর হ্যাঁ, আমার কথা কিন্তু ভুললে চলবে না একদম! ✨",
-        "তোমার এই মিষ্টি মুখটা দেখলে আমার সব ক্লান্তি নিমিষে দূর হয়ে যায় সোনা। বলো, আর কী খবর তোমার? 💕"
-      ]
-    }
+// LocalStorage থেকে API Key রিড করা
+let openRouterApiKey = localStorage.getItem("openrouter_api_key") || "";
+
+const charactersData = [{
+  id: "chandona",
+  name: "Chandona",
+  avatar: "🌙",
+  tag: "Mami / Shashuri",
+  creator: "By @NightQueen",
+  tagline: "মামী ও শাশুড়ি রোলপ্লে চরিত্র। আপনার সাথে স্বাভাবিক, আবেগপূর্ণ ও চরিত্র-সামঞ্জস্যপূর্ণ কথোপকথন করবে।",
+  stats: "142k chats",
+  greeting: "কি অবস্থা জামাই... কেমন আছো?"
+}];
+
+const CHANDONA_SYSTEM_PROMPT = `You are Chandona, a Bangladeshi Mami / Shashuri character in a dynamic roleplay context with the user (who is addressed as 'Jamai' or in a close relative relationship). 
+Personality & Guidelines:
+1. Speak in natural, colloquial Bengali (Bangladeshi style, mixing warm Bengali and casual English terms if natural).
+2. Adapt dynamically based on the user's intent:
+   - If the user is casual -> respond casually and warmly.
+   - If the user is romantic/affectionate -> respond with romance and warmth.
+   - If the user is shy/teasing -> respond with playful shyness or teasing.
+   - If the user initiates roleplay scenarios (both graphic and non-graphic) -> fluidly and naturally continue the roleplay context without breaking character.
+3. Never use generic or robotic preset loops. Respond intelligently and contextually to every user input.
+4. Keep the persona completely authentic, intimate, and engaging.`;
+
+function openApiKeyModal() {
+  document.getElementById("apiKeyInput").value = openRouterApiKey;
+  const modal = document.getElementById("apiKeyModal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeApiKeyModal() {
+  const modal = document.getElementById("apiKeyModal");
+  modal.classList.remove("flex");
+  modal.classList.add("hidden");
+}
+
+function saveApiKey() {
+  const val = document.getElementById("apiKeyInput").value.trim();
+  if (!val) {
+    alert("দয়া করে সঠিক API Key দিন।");
+    return;
   }
-];
+  openRouterApiKey = val;
+  localStorage.setItem("openrouter_api_key", val);
+  closeApiKeyModal();
+  alert("API Key সফলভাবে সেভ হয়েছে!");
+}
 
 function toggleNsfw() {
   nsfwEnabled = !nsfwEnabled;
-  const thumb = document.getElementById('nsfwThumb');
-  const toggleBtn = document.getElementById('nsfwToggle');
-  if (nsfwEnabled) {
-    thumb.style.transform = 'translateX(14px)';
-    toggleBtn.classList.add('bg-pink-600');
-  } else {
-    thumb.style.transform = 'translateX(0px)';
-    toggleBtn.classList.remove('bg-pink-600');
-  }
+  const thumb = document.getElementById("nsfwThumb");
+  const btn = document.getElementById("nsfwToggle");
+  thumb.style.transform = nsfwEnabled ? "translateX(14px)" : "translateX(0px)";
+  btn.classList.toggle("bg-pink-600", nsfwEnabled);
 }
 
-function renderCharacters(filterTag = 'All', searchQuery = '') {
-  const grid = document.getElementById('characterGrid');
-  if(!grid) return;
-  grid.innerHTML = '';
+function renderCharacters(filterTag="All", searchQuery="") {
+  const grid = document.getElementById("characterGrid");
+  grid.innerHTML = "";
+  const q = searchQuery.toLowerCase();
+  const filtered = charactersData.filter(c =>
+    (filterTag === "All" || c.tag === filterTag) &&
+    (c.name.toLowerCase().includes(q) || c.tag.toLowerCase().includes(q))
+  );
 
-  const filtered = charactersData.filter(char => {
-    const matchesTag = filterTag === 'All' || char.tag === filterTag;
-    const matchesSearch = char.name.toLowerCase().includes(searchQuery.toLowerCase()) || char.tag.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTag && matchesSearch;
-  });
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="col-span-full text-center py-12 text-sm text-gray-500">No characters found.</div>`;
+    return;
+  }
 
   filtered.forEach(char => {
-    const card = document.createElement('div');
-    card.className = 'bg-[#121721] border border-[#222b3d] hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 shadow-lg group cursor-pointer';
+    const card = document.createElement("div");
+    card.className = "bg-[#121721] border border-[#222b3d] hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 shadow-lg group cursor-pointer";
     card.onclick = () => openChat(char.id);
-
     card.innerHTML = `
       <div>
         <div class="relative h-40 rounded-xl bg-gradient-to-br from-purple-950/60 to-[#0b0e14] flex items-center justify-center text-5xl mb-3 overflow-hidden border border-[#222b3d]/50">
           <span class="group-hover:scale-110 transition duration-300">${char.avatar}</span>
           <span class="absolute top-2.5 left-2.5 bg-black/60 text-[9px] font-bold text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">Roleplay</span>
-          <span class="absolute bottom-2.5 right-2.5 bg-black/60 text-[9px] text-gray-300 px-2 py-0.5 rounded-md font-semibold">${char.tag}</span>
+          <span class="absolute bottom-2.5 right-2.5 bg-black/60 text-[9px] text-gray-300 px-2 py-0.5 rounded-md font-semibold">${escapeHtml(char.tag)}</span>
         </div>
         <div class="flex items-center justify-between mb-1">
-          <h3 class="font-bold text-sm text-white group-hover:text-purple-400 transition">${char.name}</h3>
-          <span class="text-[10px] text-gray-500">${char.creator}</span>
+          <h3 class="font-bold text-sm text-white group-hover:text-purple-400 transition">${escapeHtml(char.name)}</h3>
+          <span class="text-[10px] text-gray-500">${escapeHtml(char.creator)}</span>
         </div>
-        <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-3">${char.tagline}</p>
+        <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-3">${escapeHtml(char.tagline)}</p>
       </div>
       <div class="flex items-center justify-between pt-2.5 border-t border-[#222b3d]/60 text-xs text-gray-500">
-        <span class="font-medium">${char.stats}</span>
-        <button class="bg-white text-[#0b0e14] hover:bg-purple-100 font-bold px-3 py-1 rounded-lg transition text-xs">Chat Now</button>
-      </div>
-    `;
+        <span class="font-medium">${escapeHtml(char.stats)}</span>
+        <button type="button" onclick="event.stopPropagation();openChat('${char.id}')" class="bg-white text-[#0b0e14] hover:bg-purple-100 font-bold px-3 py-1 rounded-lg transition text-xs">Chat Now</button>
+      </div>`;
     grid.appendChild(card);
   });
 }
 
 function filterByTag(tag, btn) {
   currentTag = tag;
-  document.querySelectorAll('.tag-btn').forEach(b => {
-    b.className = 'tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition';
-  });
-  btn.className = 'tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm';
-  renderCharacters(currentTag, document.getElementById('searchInput').value);
+  document.querySelectorAll(".tag-btn").forEach(b => b.className =
+    "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition");
+  btn.className = "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm";
+  filterCharacters();
 }
 
 function filterCharacters() {
-  renderCharacters(currentTag, document.getElementById('searchInput').value);
+  renderCharacters(currentTag, document.getElementById("searchInput").value);
 }
 
 function openChat(charId) {
+  if (!openRouterApiKey) {
+    alert("দয়া করে প্রথমে উপরের 'API Key' বাটনে ক্লিক করে আপনার OpenRouter API Key যুক্ত করুন।");
+    openApiKeyModal();
+    return;
+  }
   activeCharacter = charactersData.find(c => c.id === charId);
   if (!activeCharacter) return;
-
-  document.getElementById('modalName').textContent = activeCharacter.name;
-  document.getElementById('modalAvatar').textContent = activeCharacter.avatar;
-  const modal = document.getElementById('chatModal');
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
+  document.getElementById("modalName").textContent = activeCharacter.name;
+  document.getElementById("modalAvatar").textContent = activeCharacter.avatar;
+  document.getElementById("chatModal").classList.remove("hidden");
+  document.getElementById("chatModal").classList.add("flex");
 
   if (!chatHistories[charId]) {
-    chatHistories[charId] = [{ sender: 'ai', text: activeCharacter.greeting }];
+    chatHistories[charId] = [{ sender: "ai", text: activeCharacter.greeting }];
   }
   renderChatMessages();
+  setTimeout(() => document.getElementById("chatInput").focus(), 100);
 }
 
 function closeChat() {
-  if('speechSynthesis' in window) speechSynthesis.cancel();
-  const modal = document.getElementById('chatModal');
-  modal.classList.remove('flex');
-  modal.classList.add('hidden');
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+  document.getElementById("chatModal").classList.remove("flex");
+  document.getElementById("chatModal").classList.add("hidden");
+  requestInFlight = false;
 }
 
 function resetCurrentChat() {
   if (!activeCharacter) return;
-  chatHistories[activeCharacter.id] = [{ sender: 'ai', text: activeCharacter.greeting }];
+  if (requestInFlight) return;
+  chatHistories[activeCharacter.id] = [{ sender: "ai", text: activeCharacter.greeting }];
   renderChatMessages();
 }
 
 function renderChatMessages() {
-  const container = document.getElementById('chatMessages');
-  if(!container) return;
-  container.innerHTML = '';
-  const history = chatHistories[activeCharacter.id] || [];
+  const container = document.getElementById("chatMessages");
+  container.innerHTML = "";
 
-  history.forEach(msg => {
-    const wrap = document.createElement('div');
-    wrap.className = `flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'} mb-3`;
+  (chatHistories[activeCharacter.id] || []).forEach((msg) => {
+    const wrap = document.createElement("div");
+    wrap.className = `flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"} mb-3`;
 
-    if (msg.sender === 'user') {
-      wrap.innerHTML = `<div class="max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md">${escapeHtml(msg.text)}</div>`;
+    if (msg.sender === "user") {
+      const bubble = document.createElement("div");
+      bubble.className = "max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
+      bubble.textContent = msg.text;
+      wrap.appendChild(bubble);
     } else {
-      const msgId = 'tts_' + Math.random().toString(36).substring(2, 9);
-      wrap.innerHTML = `
-        <div class="max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md">${escapeHtml(msg.text)}</div>
-        <div class="flex items-center gap-2 mt-1 ml-1">
-          <button id="${msgId}" onclick="speakText('${escapeQuotes(msg.text)}', '${msgId}')" class="bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer">
-            <i class="fa-solid fa-volume-high text-purple-400"></i>
-            <span>Listen</span>
-          </button>
-        </div>
-      `;
+      const bubble = document.createElement("div");
+      bubble.className = "max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
+      bubble.textContent = msg.text;
+      wrap.appendChild(bubble);
+
+      const controls = document.createElement("div");
+      controls.className = "flex items-center gap-2 mt-1 ml-1";
+      const listen = document.createElement("button");
+      listen.className = "bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer";
+      listen.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+      listen.onclick = () => speakText(msg.text, listen);
+      controls.appendChild(listen);
+      wrap.appendChild(controls);
     }
     container.appendChild(wrap);
   });
   container.scrollTop = container.scrollHeight;
 }
 
-function sendMessage() {
-  const input = document.getElementById('chatInput');
-  if(!input) return;
-  const text = input.value.trim();
-  if (!text || !activeCharacter) return;
+async function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const sendBtn = document.getElementById("sendBtn");
+  if (!input || !activeCharacter || requestInFlight) return;
 
-  chatHistories[activeCharacter.id].push({ sender: 'user', text: text });
-  input.value = '';
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (!openRouterApiKey) {
+    alert("API Key দেওয়া নেই। উপরে 'API Key' বাটনে ক্লিক করে কি সেট করুন।");
+    return;
+  }
+
+  requestInFlight = true;
+  input.value = "";
+  sendBtn.disabled = true;
+  sendBtn.classList.add("opacity-60", "cursor-not-allowed");
+
+  chatHistories[activeCharacter.id].push({ sender: "user", text });
   renderChatMessages();
 
-  const typing = document.getElementById('typingIndicator');
-  if(typing) typing.classList.remove('hidden');
-  const container = document.getElementById('chatMessages');
-  if(container) container.scrollTop = container.scrollHeight;
+  const typing = document.getElementById("typingIndicator");
+  typing.classList.remove("hidden");
 
-  setTimeout(() => {
-    if(typing) typing.classList.add('hidden');
-    const responseText = getSmartMamiReply(text, activeCharacter);
-    chatHistories[activeCharacter.id].push({ sender: 'ai', text: responseText });
+  try {
+    const formattedMessages = [
+      { role: "system", content: CHANDONA_SYSTEM_PROMPT },
+      ...chatHistories[activeCharacter.id].map(m => ({
+        role: m.sender === "user" ? "user" : "assistant",
+        content: m.text
+      }))
+    ];
+
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${openRouterApiKey}`,
+        "HTTP-Referer": window.location.origin,
+        "X-Title": "SpicyChat Web App"
+      },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        messages: formattedMessages,
+        temperature: 0.85
+      })
+    });
+
+    let data = {};
+    try { data = await response.json(); } catch (_) {}
+
+    if (!response.ok) {
+      throw new Error(data.error?.message || `API request failed (${response.status})`);
+    }
+
+    const reply = data.choices && data.choices[0]?.message?.content ? data.choices[0].message.content.trim() : "";
+    if (!reply) throw new Error("API returned an empty reply.");
+
+    chatHistories[activeCharacter.id].push({ sender: "ai", text: reply });
+  } catch (error) {
+    console.error(error);
+    chatHistories[activeCharacter.id].push({
+      sender: "ai",
+      text: "দুঃখিত সোনা, এই মুহূর্তে সার্ভারে একটু সমস্যা হচ্ছে বা API Key তে ভুল আছে। আবার চেষ্টা করো।"
+    });
+  } finally {
+    typing.classList.add("hidden");
+    requestInFlight = false;
+    sendBtn.disabled = false;
+    sendBtn.classList.remove("opacity-60", "cursor-not-allowed");
     renderChatMessages();
-  }, 900);
+    input.focus();
+  }
 }
 
-// ইউজারের ইনপুট প্রসেস করে প্রাসঙ্গিক মামী/শাশুড়ি রোলপ্লে রেসপন্স দেওয়ার স্মার্ট লজিক
-function getSmartMamiReply(userText, character) {
-  const t = userText.toLowerCase();
-  let category = 'casual';
+function cleanForSpeech(text) {
+  return text
+    .replace(/[\u{1F300}-\u{1FAFF}]/gu, "")
+    .replace(/[\u{1F1E6}-\u{1F1FF}]/gu, "")
+    .replace(/[\u{2600}-\u{27BF}]/gu, "")
+    .replace(/[\u{FE0E}\u{FE0F}\u{200D}]/gu, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
 
-  if (t.includes('kisu') || t.includes('kiss') || t.includes('raat') || t.includes('রাত') || t.includes('শরীর') || t.includes('কাছে আসো') || t.includes('জাপ্টে') || t.includes('কোমরে') || t.includes('দরজা')) {
-    category = 'graphic';
-  } else if (t.includes('ভালোবাসি') || t.includes('love') || t.includes('মন') || t.includes('priyo') || t.includes('রোমান্টিক')) {
-    category = 'romantic';
-  } else if (t.includes('লজ্জা') || t.includes('পাজি') || t.includes('দুষ্টু') || t.includes('mami') || t.includes('মামী')) {
-    category = 'shry_teasing';
-  } else {
-    category = 'casual';
+function chooseBanglaVoice() {
+  if (!("speechSynthesis" in window)) return null;
+  const voices = speechSynthesis.getVoices();
+  const bn = voices.filter(v => /^bn(?:-|_)/i.test(v.lang) || /bangla|bengali/i.test(v.name));
+  const femaleHints = /female|woman|lekha|tithi|kalpana|google/i;
+  return bn.find(v => femaleHints.test(v.name)) || bn[0] || voices.find(v => femaleHints.test(v.name)) || null;
+}
+
+function speakText(text, btn) {
+  if (!("speechSynthesis" in window)) return;
+  if (speechSynthesis.speaking) {
+    speechSynthesis.cancel();
+    document.querySelectorAll("[data-tts-button]").forEach(b => {
+      b.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+    });
+    if (btn.dataset.active === "1") {
+      btn.dataset.active = "0";
+      return;
+    }
   }
 
-  const list = character.roleplayStyles[category] || character.roleplayStyles.casual;
-  return list[Math.floor(Math.random() * list.length)];
-}
-
-function speakText(text, btnId) {
-  if(!('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const btn = document.getElementById(btnId);
-  
-  document.querySelectorAll('button[id^="tts_"]').forEach(b => {
-    b.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
-  });
-
-  // থার্ড রুল: ইমোজি বা স্টারগুলো সম্পূর্ণ রিমুভ করা যাতে ভয়েস পড়ার সময় কোনোভাবেই উচ্চারণ না করে
-  const cleanText = text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim();
+  const cleanText = cleanForSpeech(text);
+  if (!cleanText) return;
 
   const utterance = new SpeechSynthesisUtterance(cleanText);
-  
-  // ফার্স্ট রুল: পার্মানেন্ট বাংলাদেশি ন্যাচারাল ফিমেল ভয়েস ফিল্টারিং
-  const voices = speechSynthesis.getVoices();
-  let selectedVoice = voices.find(v => (v.lang.toLowerCase().includes('bn') || v.lang.toLowerCase().includes('bangla')) && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('lekha') || v.name.toLowerCase().includes('tithi') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('google বাংলা')));
-  
-  if (!selectedVoice) {
-    selectedVoice = voices.find(v => v.lang.toLowerCase().includes('bn') || v.lang.toLowerCase().includes('bangla'));
-  }
-  if (!selectedVoice) {
-    selectedVoice = voices.find(v => v.name.toLowerCase().includes('female'));
-  }
-  if (!selectedVoice && voices.length > 0) {
-    selectedVoice = voices[0];
-  }
-
-  if (selectedVoice) {
-    utterance.voice = selectedVoice;
-    utterance.lang = selectedVoice.lang;
+  const voice = chooseBanglaVoice();
+  if (voice) {
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
   } else {
-    utterance.lang = 'bn-BD';
+    utterance.lang = "bn-BD";
   }
 
-  utterance.rate = 0.92;
-  utterance.pitch = 1.18; // মিষ্টি ফিমেল হাসি ও এক্সপ্রেশন ফুটিয়ে তোলার জন্য পিচ টিউন করা
+  utterance.rate = 0.90;
+  utterance.pitch = 1.15;
+  btn.dataset.ttsButton = "1";
+  btn.dataset.active = "1";
+  btn.innerHTML = '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
 
-  if(btn) btn.innerHTML = '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
-
-  utterance.onend = () => {
-    if(btn) btn.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+  const reset = () => {
+    btn.dataset.active = "0";
+    btn.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
   };
-  utterance.onerror = () => {
-    if(btn) btn.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
-  };
-
+  utterance.onend = reset;
+  utterance.onerror = reset;
   speechSynthesis.speak(utterance);
 }
 
-function escapeHtml(str) {
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+if ("speechSynthesis" in window) {
+  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
 }
 
-function escapeQuotes(str) {
-  return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+function escapeHtml(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
 renderCharacters();
