@@ -144,8 +144,22 @@
 
 <script>
 
-const OPENROUTER_API_KEY = "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";
-const API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
+/* =========================================================
+   API
+========================================================= */
+
+/*
+   API KEY এখানে রাখা হয়নি।
+
+   Vercel Environment Variable:
+   OPENROUTER_API_KEY
+
+   Frontend:
+   /api/chat
+*/
+
+const API_ENDPOINT = "/api/chat";
+
 const AI_MODEL = "deepseek/deepseek-chat";
 
 let nsfwEnabled = true;
@@ -155,9 +169,9 @@ let chatHistories = {};
 let requestInFlight = false;
 
 
-/* =========================
+/* =========================================================
    CHARACTER
-========================= */
+========================================================= */
 
 const charactersData = [{
   id: "chandona",
@@ -192,43 +206,54 @@ Personality & Guidelines:
 `;
 
 
-/* =========================
+/* =========================================================
    NSFW TOGGLE
-========================= */
+========================================================= */
 
 function toggleNsfw() {
 
   nsfwEnabled = !nsfwEnabled;
 
-  const thumb = document.getElementById("nsfwThumb");
-  const btn = document.getElementById("nsfwToggle");
+  const thumb =
+    document.getElementById("nsfwThumb");
+
+  const btn =
+    document.getElementById("nsfwToggle");
 
   thumb.style.transform =
-    nsfwEnabled ? "translateX(14px)" : "translateX(0px)";
+    nsfwEnabled
+      ? "translateX(14px)"
+      : "translateX(0px)";
 
-  btn.classList.toggle("bg-pink-600", nsfwEnabled);
+  btn.classList.toggle(
+    "bg-pink-600",
+    nsfwEnabled
+  );
 }
 
 
-/* =========================
+/* =========================================================
    CHARACTER RENDER
-========================= */
+========================================================= */
 
 function renderCharacters(filterTag = "All", searchQuery = "") {
 
-  const grid = document.getElementById("characterGrid");
+  const grid =
+    document.getElementById("characterGrid");
 
   grid.innerHTML = "";
 
-  const q = searchQuery.toLowerCase();
+  const q =
+    searchQuery.toLowerCase();
 
-  const filtered = charactersData.filter(c =>
-    (filterTag === "All" || c.tag === filterTag) &&
-    (
-      c.name.toLowerCase().includes(q) ||
-      c.tag.toLowerCase().includes(q)
-    )
-  );
+  const filtered =
+    charactersData.filter(c =>
+      (filterTag === "All" || c.tag === filterTag) &&
+      (
+        c.name.toLowerCase().includes(q) ||
+        c.tag.toLowerCase().includes(q)
+      )
+    );
 
   if (!filtered.length) {
 
@@ -243,12 +268,14 @@ function renderCharacters(filterTag = "All", searchQuery = "") {
 
   filtered.forEach(char => {
 
-    const card = document.createElement("div");
+    const card =
+      document.createElement("div");
 
     card.className =
       "bg-[#121721] border border-[#222b3d] hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 shadow-lg group cursor-pointer";
 
-    card.onclick = () => openChat(char.id);
+    card.onclick =
+      () => openChat(char.id);
 
     card.innerHTML = `
 
@@ -310,9 +337,9 @@ function renderCharacters(filterTag = "All", searchQuery = "") {
 }
 
 
-/* =========================
+/* =========================================================
    FILTER
-========================= */
+========================================================= */
 
 function filterByTag(tag, btn) {
 
@@ -342,9 +369,9 @@ function filterCharacters() {
 }
 
 
-/* =========================
+/* =========================================================
    OPEN CHAT
-========================= */
+========================================================= */
 
 function openChat(charId) {
 
@@ -376,21 +403,25 @@ function openChat(charId) {
   renderChatMessages();
 
   setTimeout(() => {
+
     document.getElementById("chatInput").focus();
+
   }, 100);
 
 }
 
 
-/* =========================
+/* =========================================================
    CLOSE CHAT
-========================= */
+========================================================= */
 
 function closeChat() {
 
   if ("speechSynthesis" in window) {
     speechSynthesis.cancel();
   }
+
+  resetTTSButtons();
 
   document.getElementById("chatModal").classList.remove("flex");
   document.getElementById("chatModal").classList.add("hidden");
@@ -399,13 +430,19 @@ function closeChat() {
 }
 
 
-/* =========================
+/* =========================================================
    RESET
-========================= */
+========================================================= */
 
 function resetCurrentChat() {
 
   if (!activeCharacter || requestInFlight) return;
+
+  if ("speechSynthesis" in window) {
+    speechSynthesis.cancel();
+  }
+
+  resetTTSButtons();
 
   chatHistories[activeCharacter.id] = [
     {
@@ -418,9 +455,9 @@ function resetCurrentChat() {
 }
 
 
-/* =========================
+/* =========================================================
    CHAT RENDER
-========================= */
+========================================================= */
 
 function renderChatMessages() {
 
@@ -432,7 +469,8 @@ function renderChatMessages() {
   (chatHistories[activeCharacter.id] || [])
     .forEach((msg) => {
 
-      const wrap = document.createElement("div");
+      const wrap =
+        document.createElement("div");
 
       wrap.className =
         `flex flex-col ${
@@ -444,23 +482,27 @@ function renderChatMessages() {
 
       if (msg.sender === "user") {
 
-        const bubble = document.createElement("div");
+        const bubble =
+          document.createElement("div");
 
         bubble.className =
           "max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
 
-        bubble.textContent = msg.text;
+        bubble.textContent =
+          msg.text;
 
         wrap.appendChild(bubble);
 
       } else {
 
-        const bubble = document.createElement("div");
+        const bubble =
+          document.createElement("div");
 
         bubble.className =
           "max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
 
-        bubble.textContent = msg.text;
+        bubble.textContent =
+          msg.text;
 
         wrap.appendChild(bubble);
 
@@ -484,15 +526,22 @@ function renderChatMessages() {
 
         listen.onclick = () => {
 
-          if (textContainsLaugh(msg.text)) {
+          if (
+            "speechSynthesis" in window &&
+            speechSynthesis.speaking
+          ) {
 
-            playLaughSound();
+            speechSynthesis.cancel();
 
-          } else {
+            resetTTSButtons();
 
-            speakText(msg.text, listen);
-
+            return;
           }
+
+          speakBanglaFemale(
+            msg.text,
+            listen
+          );
 
         };
 
@@ -511,9 +560,9 @@ function renderChatMessages() {
 }
 
 
-/* =========================
+/* =========================================================
    SEND MESSAGE
-========================= */
+========================================================= */
 
 async function sendMessage() {
 
@@ -583,56 +632,59 @@ async function sendMessage() {
     ];
 
 
-    const response = await fetch(
-      API_ENDPOINT,
-      {
-        method: "POST",
+    /*
+       IMPORTANT:
 
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization":
-            `Bearer ${OPENROUTER_API_KEY}`,
-          "HTTP-Referer":
-            window.location.origin,
-          "X-Title":
-            "SpicyChat Web App"
-        },
+       API key is NOT exposed in the browser.
 
-        body: JSON.stringify({
+       Request goes to Vercel:
+       /api/chat
+    */
 
-          model: AI_MODEL,
+    const response =
+      await fetch(
+        API_ENDPOINT,
+        {
+          method: "POST",
 
-          messages:
-            formattedMessages,
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
 
-          temperature: 0.85
+          body: JSON.stringify({
 
-        })
-      }
-    );
+            model: AI_MODEL,
+
+            messages:
+              formattedMessages,
+
+            temperature: 0.85
+
+          })
+        }
+      );
 
 
     let data = {};
 
     try {
 
-      data = await response.json();
+      data =
+        await response.json();
 
     } catch (_) {}
 
 
-    /* =========================
-       API ERROR FIX
-    ========================= */
-
     if (!response.ok) {
 
       const apiMessage =
-        data?.error?.message ||
-        data?.error?.metadata?.raw ||
+        data?.error ||
+        data?.message ||
         `API request failed (${response.status})`;
 
       throw new Error(apiMessage);
+
     }
 
 
@@ -653,36 +705,20 @@ async function sendMessage() {
 
 
     chatHistories[activeCharacter.id].push({
+
       sender: "ai",
+
       text: reply
+
     });
-
-
-    /* =========================
-       AUTO LAUGH SOUND
-    ========================= */
-
-    if (textContainsLaugh(reply)) {
-
-      setTimeout(() => {
-
-        playLaughSound();
-
-      }, 120);
-
-    }
 
 
   } catch (error) {
 
-    console.error("API ERROR:", error);
-
-
-    /* Actual API error message */
-
-    const errorMessage =
-      error?.message ||
-      "Unknown API error";
+    console.error(
+      "API ERROR:",
+      error
+    );
 
 
     chatHistories[activeCharacter.id].push({
@@ -690,7 +726,7 @@ async function sendMessage() {
       sender: "ai",
 
       text:
-        `API Error: ${errorMessage}`
+        `API Error: ${error.message || "Unknown API error"}`
 
     });
 
@@ -717,13 +753,235 @@ async function sendMessage() {
 }
 
 
-/* =========================
-   TEXT CLEANER
-========================= */
+/* =========================================================
+   BANGLA FEMALE VOICE
+========================================================= */
+
+function getBanglaFemaleVoice() {
+
+  if (!("speechSynthesis" in window))
+    return null;
+
+
+  const voices =
+    speechSynthesis.getVoices();
+
+
+  if (!voices || !voices.length)
+    return null;
+
+
+  /*
+     Bengali / Bangla voices
+  */
+
+  const banglaVoices =
+    voices.filter(voice =>
+
+      /^bn(-|_)/i.test(
+        voice.lang
+      )
+
+      ||
+
+      /bengali|bangla|বাংলা/i.test(
+        voice.name
+      )
+
+    );
+
+
+  /*
+     Female voice hints.
+     Exact voice depends on Android/browser.
+  */
+
+  const femaleHints =
+    /female|woman|girl|lady|zira|samantha|google.*female|lekha|tithi|kalpana|ananya|priya|neela/i;
+
+
+  /*
+     First:
+     Bengali + female
+  */
+
+  const banglaFemale =
+    banglaVoices.find(
+      voice =>
+        femaleHints.test(
+          voice.name
+        )
+    );
+
+
+  if (banglaFemale)
+    return banglaFemale;
+
+
+  /*
+     Second:
+     Any Bengali voice
+  */
+
+  if (banglaVoices.length)
+    return banglaVoices[0];
+
+
+  /*
+     Last fallback:
+     any female voice
+  */
+
+  const femaleVoice =
+    voices.find(
+      voice =>
+        femaleHints.test(
+          voice.name
+        )
+    );
+
+
+  return femaleVoice || null;
+
+}
+
+
+/* =========================================================
+   SPEAK BANGLA FEMALE
+========================================================= */
+
+function speakBanglaFemale(
+  text,
+  btn
+) {
+
+  if (!("speechSynthesis" in window))
+    return;
+
+
+  speechSynthesis.cancel();
+
+  resetTTSButtons();
+
+
+  const cleanText =
+    cleanForSpeech(text);
+
+
+  if (!cleanText)
+    return;
+
+
+  const utterance =
+    new SpeechSynthesisUtterance(
+      cleanText
+    );
+
+
+  const voice =
+    getBanglaFemaleVoice();
+
+
+  if (voice) {
+
+    utterance.voice =
+      voice;
+
+    utterance.lang =
+      voice.lang;
+
+  } else {
+
+    utterance.lang =
+      "bn-BD";
+
+  }
+
+
+  /*
+     Female-style voice settings
+  */
+
+  utterance.rate =
+    0.90;
+
+  utterance.pitch =
+    1.15;
+
+  utterance.volume =
+    1;
+
+
+  if (btn) {
+
+    btn.dataset.active =
+      "1";
+
+    btn.innerHTML =
+      '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
+
+  }
+
+
+  utterance.onend =
+    () => {
+
+      resetTTSButtons();
+
+    };
+
+
+  utterance.onerror =
+    () => {
+
+      resetTTSButtons();
+
+    };
+
+
+  speechSynthesis.speak(
+    utterance
+  );
+
+}
+
+
+/* =========================================================
+   TTS BUTTON RESET
+========================================================= */
+
+function resetTTSButtons() {
+
+  document
+    .querySelectorAll(
+      "#chatMessages button"
+    )
+    .forEach(btn => {
+
+      if (
+        btn.dataset.active === "1"
+      ) {
+
+        btn.dataset.active =
+          "0";
+
+        btn.innerHTML =
+          '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+
+      }
+
+    });
+
+}
+
+
+/* =========================================================
+   CLEAN SPEECH TEXT
+========================================================= */
 
 function cleanForSpeech(text) {
 
-  return text
+  return String(text)
 
     .replace(
       /[\u{1F300}-\u{1FAFF}]/gu,
@@ -755,221 +1013,9 @@ function cleanForSpeech(text) {
 }
 
 
-/* =========================
-   BANGLA FEMALE VOICE
-========================= */
-
-function chooseBanglaVoice() {
-
-  if (!("speechSynthesis" in window))
-    return null;
-
-
-  const voices =
-    speechSynthesis.getVoices();
-
-
-  const bnVoices =
-    voices.filter(v =>
-
-      /^bn(?:-|_)/i.test(v.lang) ||
-
-      /bangla|bengali|বাংলা/i
-        .test(v.name)
-
-    );
-
-
-  /* Prefer female Bengali voice */
-
-  const femaleHints =
-    /female|woman|girl|female voice|lekha|tithi|kalpana|ananya|aarti|priya|neela/i;
-
-
-  const femaleBangla =
-    bnVoices.find(v =>
-      femaleHints.test(v.name)
-    );
-
-
-  return (
-    femaleBangla ||
-    bnVoices[0] ||
-    null
-  );
-
-}
-
-
-/* =========================
-   LAUGH SOUND
-========================= */
-
-function playLaughSound() {
-
-  if (!("speechSynthesis" in window))
-    return;
-
-
-  speechSynthesis.cancel();
-
-
-  const laugh =
-    new SpeechSynthesisUtterance(
-      "হা হা হা"
-    );
-
-
-  const voice =
-    chooseBanglaVoice();
-
-
-  if (voice) {
-
-    laugh.voice = voice;
-
-    laugh.lang = voice.lang;
-
-  } else {
-
-    laugh.lang = "bn-BD";
-
-  }
-
-
-  laugh.rate = 1.05;
-
-  laugh.pitch = 1.25;
-
-  laugh.volume = 1;
-
-
-  speechSynthesis.speak(laugh);
-
-}
-
-
-/* =========================
-   DETECT LAUGH
-========================= */
-
-function textContainsLaugh(text) {
-
-  return /(?:হা\s*হা|হাহা|হি\s*হি|হিহি|haha|hehe|lol|😂|🤣)/i
-    .test(text);
-
-}
-
-
-/* =========================
-   SPEAK TEXT
-========================= */
-
-function speakText(text, btn) {
-
-  if (!("speechSynthesis" in window))
-    return;
-
-
-  if (speechSynthesis.speaking) {
-
-    speechSynthesis.cancel();
-
-
-    document
-      .querySelectorAll("[data-tts-button]")
-      .forEach(b => {
-
-        b.innerHTML =
-          '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
-
-      });
-
-
-    if (btn.dataset.active === "1") {
-
-      btn.dataset.active = "0";
-
-      return;
-
-    }
-
-  }
-
-
-  const cleanText =
-    cleanForSpeech(text);
-
-
-  if (!cleanText) return;
-
-
-  const utterance =
-    new SpeechSynthesisUtterance(
-      cleanText
-    );
-
-
-  const voice =
-    chooseBanglaVoice();
-
-
-  if (voice) {
-
-    utterance.voice = voice;
-
-    utterance.lang = voice.lang;
-
-  } else {
-
-    utterance.lang = "bn-BD";
-
-  }
-
-
-  /* Female-style settings */
-
-  utterance.rate = 0.90;
-
-  utterance.pitch = 1.15;
-
-  utterance.volume = 1;
-
-
-  btn.dataset.ttsButton = "1";
-
-  btn.dataset.active = "1";
-
-
-  btn.innerHTML =
-    '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
-
-
-  const reset = () => {
-
-    btn.dataset.active = "0";
-
-    btn.innerHTML =
-      '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
-
-  };
-
-
-  utterance.onend = reset;
-
-  utterance.onerror = reset;
-
-
-  speechSynthesis.speak(
-    utterance
-  );
-
-}
-
-
-/* =========================
-   LOAD TTS VOICES
-========================= */
+/* =========================================================
+   LOAD VOICES
+========================================================= */
 
 if ("speechSynthesis" in window) {
 
@@ -983,9 +1029,9 @@ if ("speechSynthesis" in window) {
 }
 
 
-/* =========================
+/* =========================================================
    ESCAPE HTML
-========================= */
+========================================================= */
 
 function escapeHtml(str) {
 
@@ -1019,9 +1065,9 @@ function escapeHtml(str) {
 }
 
 
-/* =========================
+/* =========================================================
    START
-========================= */
+========================================================= */
 
 renderCharacters();
 
