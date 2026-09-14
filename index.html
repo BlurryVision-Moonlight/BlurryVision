@@ -4,188 +4,310 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SpicyChat.ai — Web App</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
+
 <body class="bg-[#0b0e14] text-gray-100 font-sans min-h-screen flex flex-col">
 
 <header class="sticky top-0 z-40 bg-[#0b0e14]/90 backdrop-blur-md border-b border-[#222b3d] px-4 lg:px-8 h-16 flex items-center justify-between">
+
   <div class="flex items-center gap-4">
-    <a href="#" class="text-xl font-black tracking-tight flex items-center gap-2">
-      <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">SpicyChat</span>
-      <span class="text-xs bg-purple-950 border border-purple-800 text-purple-300 px-2 py-0.5 rounded-full font-semibold">AI v4.0</span>
+
+    <a href="#"
+      class="text-xl font-black tracking-tight flex items-center gap-2">
+
+      <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
+        SpicyChat
+      </span>
+
+      <span class="text-xs bg-purple-950 border border-purple-800 text-purple-300 px-2 py-0.5 rounded-full font-semibold">
+        AI v4.0
+      </span>
+
     </a>
+
   </div>
 
+
   <div class="flex items-center gap-3">
+
     <div class="flex items-center gap-1.5 bg-[#121721] border border-[#222b3d] px-2.5 py-1.5 rounded-full">
-      <span class="text-[11px] font-bold text-pink-400 tracking-wider">NSFW</span>
-      <button id="nsfwToggle" onclick="toggleNsfw()" aria-label="Toggle NSFW"
+
+      <span class="text-[11px] font-bold text-pink-400 tracking-wider">
+        NSFW
+      </span>
+
+      <button
+        id="nsfwToggle"
+        onclick="toggleNsfw()"
+        aria-label="Toggle NSFW"
         class="w-8 h-4.5 bg-pink-600 rounded-full relative transition flex items-center px-0.5 cursor-pointer">
-        <div id="nsfwThumb"
-          class="w-3.5 h-3.5 bg-white rounded-full transition-transform transform translate-x-3.5"></div>
+
+        <div
+          id="nsfwThumb"
+          class="w-3.5 h-3.5 bg-white rounded-full transition-transform transform translate-x-3.5">
+        </div>
+
       </button>
+
     </div>
+
 
     <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center font-bold text-xs text-white shadow">
       DF
     </div>
+
   </div>
+
 </header>
+
 
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex flex-col gap-6">
 
   <section class="flex flex-col gap-4">
+
     <div>
-      <h1 class="text-2xl md:text-3xl font-black tracking-tight">Explore AI Characters</h1>
+
+      <h1 class="text-2xl md:text-3xl font-black tracking-tight">
+        Explore AI Characters
+      </h1>
+
       <p class="text-sm text-gray-400 mt-1">
         Immerse yourself in dynamic, human-like conversations and multilingual roleplay.
       </p>
+
     </div>
 
+
     <div class="relative w-full">
+
       <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-      <input id="searchInput"
+
+      <input
+        id="searchInput"
         type="text"
         placeholder="Search characters..."
         oninput="filterCharacters()"
         class="w-full bg-[#121721] border border-[#222b3d] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition">
+
     </div>
 
-    <div id="tagFilters" class="flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold">
-      <button onclick="filterByTag('All', this)"
+
+    <div id="tagFilters"
+      class="flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold">
+
+      <button
+        onclick="filterByTag('All', this)"
         class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm">
+
         🔥 All
+
       </button>
 
-      <button onclick="filterByTag('Mami / Shashuri', this)"
+
+      <button
+        onclick="filterByTag('Mami / Shashuri', this)"
         class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition">
+
         🌸 Mami / Shashuri
+
       </button>
+
     </div>
+
   </section>
 
+
   <section class="pb-12">
-    <div id="characterGrid"
+
+    <div
+      id="characterGrid"
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     </div>
+
   </section>
 
 </main>
 
-<div id="chatModal"
+
+<div
+  id="chatModal"
   class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex-col justify-end md:items-center md:justify-center p-0 md:p-4">
 
-  <div class="w-full h-full md:max-w-3xl md:h-[85vh] bg-[#121721] border border-[#222b3d] md:rounded-2xl flex flex-col overflow-hidden shadow-2xl">
+  <div
+    class="w-full h-full md:max-w-3xl md:h-[85vh] bg-[#121721] border border-[#222b3d] md:rounded-2xl flex flex-col overflow-hidden shadow-2xl">
 
-    <div class="h-16 px-4 bg-[#0b0e14] border-b border-[#222b3d] flex items-center justify-between shrink-0">
+
+    <div
+      class="h-16 px-4 bg-[#0b0e14] border-b border-[#222b3d] flex items-center justify-between shrink-0">
+
 
       <div class="flex items-center gap-3">
-        <div id="modalAvatar"
+
+        <div
+          id="modalAvatar"
           class="w-10 h-10 rounded-xl bg-purple-900 flex items-center justify-center text-xl">
           🌙
         </div>
 
+
         <div>
-          <h3 id="modalName" class="font-bold text-sm text-white">Chandona</h3>
+
+          <h3
+            id="modalName"
+            class="font-bold text-sm text-white">
+            Chandona
+          </h3>
+
 
           <div class="flex items-center gap-1.5 mt-0.5">
+
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+
             <span class="text-[11px] text-gray-400">
               Online · Mami / Shashuri Roleplay
             </span>
+
           </div>
+
         </div>
+
       </div>
 
+
       <div class="flex items-center gap-2">
-        <button onclick="resetCurrentChat()"
+
+        <button
+          onclick="resetCurrentChat()"
           class="text-xs bg-[#0b0e14] border border-[#222b3d] text-gray-300 px-3 py-1.5 rounded-lg">
+
           Restart
+
         </button>
 
-        <button onclick="closeChat()"
+
+        <button
+          onclick="closeChat()"
           class="w-9 h-9 rounded-xl bg-[#0b0e14] border border-[#222b3d] text-gray-400 hover:text-white flex items-center justify-center">
+
           <i class="fa-solid fa-xmark"></i>
+
         </button>
+
       </div>
 
     </div>
 
-    <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
 
-    <div id="typingIndicator"
+    <div
+      id="chatMessages"
+      class="flex-1 overflow-y-auto p-4 space-y-4">
+    </div>
+
+
+    <div
+      id="typingIndicator"
       class="hidden px-4 py-2 text-xs text-gray-400 flex items-center gap-2">
 
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce"></span>
+
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
 
-      <span class="italic ml-1">চন্দনা লিখছে...</span>
+      <span class="italic ml-1">
+        চন্দনা লিখছে...
+      </span>
+
     </div>
 
-    <div class="p-3 bg-[#0b0e14] border-t border-[#222b3d] flex items-center gap-2 shrink-0">
 
-      <input id="chatInput"
+    <div
+      class="p-3 bg-[#0b0e14] border-t border-[#222b3d] flex items-center gap-2 shrink-0">
+
+
+      <input
+        id="chatInput"
         type="text"
         placeholder="চন্দনার সাথে কথা বলুন..."
         onkeydown="if(event.key==='Enter')sendMessage()"
         class="flex-1 bg-[#121721] border border-[#222b3d] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500">
 
-      <button id="sendBtn"
+
+      <button
+        id="sendBtn"
         onclick="sendMessage()"
         class="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center">
+
         <i class="fa-solid fa-paper-plane text-xs"></i>
+
       </button>
 
     </div>
+
   </div>
+
 </div>
+
 
 <script>
 
-/* =========================================================
-   API
-========================================================= */
 
-/*
-   API KEY এখানে রাখা হয়নি।
-
-   Vercel Environment Variable:
-   OPENROUTER_API_KEY
-
-   Frontend:
-   /api/chat
-*/
-
-const API_ENDPOINT = "/api/chat";
-
-const AI_MODEL = "deepseek/deepseek-chat";
+/* =========================
+   SETTINGS
+========================= */
 
 let nsfwEnabled = true;
+
 let currentTag = "All";
+
 let activeCharacter = null;
+
 let chatHistories = {};
+
 let requestInFlight = false;
 
 
-/* =========================================================
+/* =========================
    CHARACTER
-========================================================= */
+========================= */
 
-const charactersData = [{
-  id: "chandona",
-  name: "Chandona",
-  avatar: "🌙",
-  tag: "Mami / Shashuri",
-  creator: "By @NightQueen",
-  tagline: "মামী ও শাশুড়ি রোলপ্লে চরিত্র। আপনার সাথে স্বাভাবিক, আবেগপূর্ণ ও চরিত্র-সামঞ্জস্যপূর্ণ কথোপকথন করবে।",
-  stats: "142k chats",
-  greeting: "কি অবস্থা জামাই... কেমন আছো?"
-}];
+const charactersData = [
 
+  {
+    id: "chandona",
+
+    name: "Chandona",
+
+    avatar: "🌙",
+
+    tag: "Mami / Shashuri",
+
+    creator: "By @NightQueen",
+
+    tagline:
+      "মামী ও শাশুড়ি রোলপ্লে চরিত্র। আপনার সাথে স্বাভাবিক, আবেগপূর্ণ ও চরিত্র-সামঞ্জস্যপূর্ণ কথোপকথন করবে।",
+
+    stats: "142k chats",
+
+    greeting:
+      "কি অবস্থা জামাই... কেমন আছো?"
+  }
+
+];
+
+
+/* =========================
+   CHANDONA SYSTEM PROMPT
+========================= */
 
 const CHANDONA_SYSTEM_PROMPT = `
+
 You are Chandona, a Bangladeshi Mami / Shashuri character in a dynamic roleplay context with the user.
 
 Personality & Guidelines:
@@ -193,22 +315,27 @@ Personality & Guidelines:
 1. Speak in natural, colloquial Bengali (Bangladeshi style, mixing warm Bengali and casual English terms if natural).
 
 2. Adapt dynamically based on the user's intent:
-   - If the user is casual -> respond casually and warmly.
-   - If the user is romantic/affectionate -> respond with romance and warmth.
-   - If the user is shy/teasing -> respond with playful shyness or teasing.
-   - If the user initiates roleplay scenarios -> continue naturally while staying in character.
+
+- If the user is casual -> respond casually and warmly.
+
+- If the user is romantic/affectionate -> respond with romance and warmth.
+
+- If the user is shy/teasing -> respond with playful shyness or teasing.
+
+- If the user initiates roleplay scenarios -> continue naturally while staying in character.
 
 3. Never use generic or robotic preset loops.
 
 4. Respond intelligently and contextually to every user input.
 
 5. Keep the persona authentic, engaging and natural.
+
 `;
 
 
-/* =========================================================
+/* =========================
    NSFW TOGGLE
-========================================================= */
+========================= */
 
 function toggleNsfw() {
 
@@ -220,62 +347,86 @@ function toggleNsfw() {
   const btn =
     document.getElementById("nsfwToggle");
 
+
   thumb.style.transform =
     nsfwEnabled
       ? "translateX(14px)"
       : "translateX(0px)";
 
+
   btn.classList.toggle(
     "bg-pink-600",
     nsfwEnabled
   );
+
 }
 
 
-/* =========================================================
+/* =========================
    CHARACTER RENDER
-========================================================= */
+========================= */
 
-function renderCharacters(filterTag = "All", searchQuery = "") {
+function renderCharacters(
+  filterTag = "All",
+  searchQuery = ""
+) {
 
   const grid =
     document.getElementById("characterGrid");
 
   grid.innerHTML = "";
 
+
   const q =
     searchQuery.toLowerCase();
 
+
   const filtered =
     charactersData.filter(c =>
-      (filterTag === "All" || c.tag === filterTag) &&
+
+      (filterTag === "All" ||
+       c.tag === filterTag)
+
+      &&
+
       (
         c.name.toLowerCase().includes(q) ||
         c.tag.toLowerCase().includes(q)
       )
+
     );
+
 
   if (!filtered.length) {
 
     grid.innerHTML = `
+
       <div class="col-span-full text-center py-12 text-sm text-gray-500">
+
         No characters found.
+
       </div>
+
     `;
 
     return;
+
   }
+
 
   filtered.forEach(char => {
 
     const card =
       document.createElement("div");
 
+
     card.className =
       "bg-[#121721] border border-[#222b3d] hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 shadow-lg group cursor-pointer";
 
+
     card.onclick =
       () => openChat(char.id);
+
 
     card.innerHTML = `
 
@@ -284,312 +435,423 @@ function renderCharacters(filterTag = "All", searchQuery = "") {
         <div class="relative h-40 rounded-xl bg-gradient-to-br from-purple-950/60 to-[#0b0e14] flex items-center justify-center text-5xl mb-3 overflow-hidden border border-[#222b3d]/50">
 
           <span class="group-hover:scale-110 transition duration-300">
+
             ${char.avatar}
+
           </span>
+
 
           <span class="absolute top-2.5 left-2.5 bg-black/60 text-[9px] font-bold text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">
+
             Roleplay
+
           </span>
 
+
           <span class="absolute bottom-2.5 right-2.5 bg-black/60 text-[9px] text-gray-300 px-2 py-0.5 rounded-md font-semibold">
+
             ${escapeHtml(char.tag)}
+
           </span>
 
         </div>
+
 
         <div class="flex items-center justify-between mb-1">
 
           <h3 class="font-bold text-sm text-white group-hover:text-purple-400 transition">
+
             ${escapeHtml(char.name)}
+
           </h3>
 
+
           <span class="text-[10px] text-gray-500">
+
             ${escapeHtml(char.creator)}
+
           </span>
 
         </div>
 
+
         <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-3">
+
           ${escapeHtml(char.tagline)}
+
         </p>
 
       </div>
 
+
       <div class="flex items-center justify-between pt-2.5 border-t border-[#222b3d]/60 text-xs text-gray-500">
 
         <span class="font-medium">
+
           ${escapeHtml(char.stats)}
+
         </span>
+
 
         <button
           type="button"
           onclick="event.stopPropagation();openChat('${char.id}')"
           class="bg-white text-[#0b0e14] hover:bg-purple-100 font-bold px-3 py-1 rounded-lg transition text-xs">
+
           Chat Now
+
         </button>
 
       </div>
+
     `;
+
 
     grid.appendChild(card);
 
   });
+
 }
 
 
-/* =========================================================
+/* =========================
    FILTER
-========================================================= */
+========================= */
 
 function filterByTag(tag, btn) {
 
   currentTag = tag;
 
-  document.querySelectorAll(".tag-btn").forEach(b => {
 
-    b.className =
-      "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition";
+  document
+    .querySelectorAll(".tag-btn")
+    .forEach(b => {
 
-  });
+      b.className =
+        "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition";
+
+    });
+
 
   btn.className =
     "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm";
 
+
   filterCharacters();
+
 }
 
 
 function filterCharacters() {
 
   renderCharacters(
+
     currentTag,
-    document.getElementById("searchInput").value
+
+    document.getElementById(
+      "searchInput"
+    ).value
+
   );
 
 }
 
 
-/* =========================================================
+/* =========================
    OPEN CHAT
-========================================================= */
+========================= */
 
 function openChat(charId) {
 
   activeCharacter =
-    charactersData.find(c => c.id === charId);
+    charactersData.find(
+      c => c.id === charId
+    );
 
-  if (!activeCharacter) return;
 
-  document.getElementById("modalName").textContent =
+  if (!activeCharacter)
+    return;
+
+
+  document.getElementById(
+    "modalName"
+  ).textContent =
     activeCharacter.name;
 
-  document.getElementById("modalAvatar").textContent =
+
+  document.getElementById(
+    "modalAvatar"
+  ).textContent =
     activeCharacter.avatar;
 
-  document.getElementById("chatModal").classList.remove("hidden");
-  document.getElementById("chatModal").classList.add("flex");
+
+  document.getElementById(
+    "chatModal"
+  ).classList.remove("hidden");
+
+
+  document.getElementById(
+    "chatModal"
+  ).classList.add("flex");
+
 
   if (!chatHistories[charId]) {
 
     chatHistories[charId] = [
+
       {
         sender: "ai",
         text: activeCharacter.greeting
       }
+
     ];
 
   }
 
+
   renderChatMessages();
+
 
   setTimeout(() => {
 
-    document.getElementById("chatInput").focus();
+    document
+      .getElementById("chatInput")
+      .focus();
 
   }, 100);
 
 }
 
 
-/* =========================================================
+/* =========================
    CLOSE CHAT
-========================================================= */
+========================= */
 
 function closeChat() {
 
   if ("speechSynthesis" in window) {
+
     speechSynthesis.cancel();
+
   }
 
-  resetTTSButtons();
 
-  document.getElementById("chatModal").classList.remove("flex");
-  document.getElementById("chatModal").classList.add("hidden");
+  document
+    .getElementById("chatModal")
+    .classList.remove("flex");
+
+
+  document
+    .getElementById("chatModal")
+    .classList.add("hidden");
+
 
   requestInFlight = false;
+
 }
 
 
-/* =========================================================
+/* =========================
    RESET
-========================================================= */
+========================= */
 
 function resetCurrentChat() {
 
-  if (!activeCharacter || requestInFlight) return;
+  if (
+    !activeCharacter ||
+    requestInFlight
+  )
+    return;
 
-  if ("speechSynthesis" in window) {
-    speechSynthesis.cancel();
-  }
 
-  resetTTSButtons();
+  chatHistories[
+    activeCharacter.id
+  ] = [
 
-  chatHistories[activeCharacter.id] = [
     {
       sender: "ai",
       text: activeCharacter.greeting
     }
+
   ];
 
+
   renderChatMessages();
+
 }
 
 
-/* =========================================================
+/* =========================
    CHAT RENDER
-========================================================= */
+========================= */
 
 function renderChatMessages() {
 
   const container =
-    document.getElementById("chatMessages");
+    document.getElementById(
+      "chatMessages"
+    );
+
 
   container.innerHTML = "";
 
-  (chatHistories[activeCharacter.id] || [])
-    .forEach((msg) => {
 
-      const wrap =
+  (
+    chatHistories[
+      activeCharacter.id
+    ] || []
+
+  ).forEach(msg => {
+
+    const wrap =
+      document.createElement("div");
+
+
+    wrap.className =
+      `flex flex-col ${
+        msg.sender === "user"
+          ? "items-end"
+          : "items-start"
+      } mb-3`;
+
+
+    if (msg.sender === "user") {
+
+      const bubble =
         document.createElement("div");
 
-      wrap.className =
-        `flex flex-col ${
-          msg.sender === "user"
-            ? "items-end"
-            : "items-start"
-        } mb-3`;
+
+      bubble.className =
+        "max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
 
 
-      if (msg.sender === "user") {
-
-        const bubble =
-          document.createElement("div");
-
-        bubble.className =
-          "max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
-
-        bubble.textContent =
-          msg.text;
-
-        wrap.appendChild(bubble);
-
-      } else {
-
-        const bubble =
-          document.createElement("div");
-
-        bubble.className =
-          "max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
-
-        bubble.textContent =
-          msg.text;
-
-        wrap.appendChild(bubble);
+      bubble.textContent =
+        msg.text;
 
 
-        const controls =
-          document.createElement("div");
+      wrap.appendChild(bubble);
 
-        controls.className =
-          "flex items-center gap-2 mt-1 ml-1";
+    }
 
 
-        const listen =
-          document.createElement("button");
+    else {
 
-        listen.className =
-          "bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer";
-
-        listen.innerHTML =
-          '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+      const bubble =
+        document.createElement("div");
 
 
-        listen.onclick = () => {
+      bubble.className =
+        "max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
 
-          if (
-            "speechSynthesis" in window &&
-            speechSynthesis.speaking
-          ) {
 
-            speechSynthesis.cancel();
+      bubble.textContent =
+        msg.text;
 
-            resetTTSButtons();
 
-            return;
-          }
+      wrap.appendChild(bubble);
 
-          speakBanglaFemale(
+
+      const controls =
+        document.createElement("div");
+
+
+      controls.className =
+        "flex items-center gap-2 mt-1 ml-1";
+
+
+      const listen =
+        document.createElement("button");
+
+
+      listen.className =
+        "bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer";
+
+
+      listen.innerHTML =
+        '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+
+
+      listen.onclick = () => {
+
+        if (textContainsLaugh(msg.text)) {
+
+          playLaughSound();
+
+        }
+
+        else {
+
+          speakText(
             msg.text,
             listen
           );
 
-        };
+        }
+
+      };
 
 
-        controls.appendChild(listen);
-        wrap.appendChild(controls);
+      controls.appendChild(listen);
 
-      }
+      wrap.appendChild(controls);
 
-      container.appendChild(wrap);
+    }
 
-    });
+
+    container.appendChild(wrap);
+
+  });
+
 
   container.scrollTop =
     container.scrollHeight;
+
 }
 
 
-/* =========================================================
+/* =========================
    SEND MESSAGE
-========================================================= */
+   SECURE BACKEND
+========================= */
 
 async function sendMessage() {
 
   const input =
-    document.getElementById("chatInput");
+    document.getElementById(
+      "chatInput"
+    );
+
 
   const sendBtn =
-    document.getElementById("sendBtn");
+    document.getElementById(
+      "sendBtn"
+    );
+
 
   if (
     !input ||
     !activeCharacter ||
     requestInFlight
-  ) return;
+  )
+    return;
 
 
   const text =
     input.value.trim();
 
-  if (!text) return;
+
+  if (!text)
+    return;
 
 
   requestInFlight = true;
 
+
   input.value = "";
 
+
   sendBtn.disabled = true;
+
 
   sendBtn.classList.add(
     "opacity-60",
@@ -597,102 +859,127 @@ async function sendMessage() {
   );
 
 
-  chatHistories[activeCharacter.id].push({
+  chatHistories[
+    activeCharacter.id
+  ].push({
+
     sender: "user",
+
     text
+
   });
+
 
   renderChatMessages();
 
 
   const typing =
-    document.getElementById("typingIndicator");
+    document.getElementById(
+      "typingIndicator"
+    );
 
-  typing.classList.remove("hidden");
+
+  typing.classList.remove(
+    "hidden"
+  );
 
 
   try {
+
 
     const formattedMessages = [
 
       {
         role: "system",
-        content: CHANDONA_SYSTEM_PROMPT
+        content:
+          CHANDONA_SYSTEM_PROMPT
       },
 
-      ...chatHistories[activeCharacter.id]
-        .map(m => ({
-          role:
-            m.sender === "user"
-              ? "user"
-              : "assistant",
-          content: m.text
-        }))
+      ...chatHistories[
+        activeCharacter.id
+      ].map(m => ({
+
+        role:
+          m.sender === "user"
+            ? "user"
+            : "assistant",
+
+        content: m.text
+
+      }))
 
     ];
 
 
     /*
-       IMPORTANT:
+      IMPORTANT:
 
-       API key is NOT exposed in the browser.
+      API key is NOT here.
 
-       Request goes to Vercel:
-       /api/chat
+      Request goes to Vercel backend.
     */
 
     const response =
       await fetch(
-        API_ENDPOINT,
+        "/api/chat",
         {
+
           method: "POST",
 
           headers: {
+
             "Content-Type":
               "application/json"
+
           },
 
-          body: JSON.stringify({
+          body:
+            JSON.stringify({
 
-            model: AI_MODEL,
+              messages:
+                formattedMessages,
 
-            messages:
-              formattedMessages,
+              temperature:
+                0.85
 
-            temperature: 0.85
+            })
 
-          })
         }
+
       );
 
 
     let data = {};
+
 
     try {
 
       data =
         await response.json();
 
-    } catch (_) {}
+    }
+
+    catch (_) {}
 
 
     if (!response.ok) {
 
       const apiMessage =
+        data?.error?.message ||
         data?.error ||
-        data?.message ||
         `API request failed (${response.status})`;
 
-      throw new Error(apiMessage);
+
+      throw new Error(
+        apiMessage
+      );
 
     }
 
 
     const reply =
-      data.choices &&
-      data.choices[0]?.message?.content
-        ? data.choices[0].message.content.trim()
-        : "";
+      data?.choices?.[0]?.message?.content
+        ?.trim() || "";
 
 
     if (!reply) {
@@ -704,7 +991,9 @@ async function sendMessage() {
     }
 
 
-    chatHistories[activeCharacter.id].push({
+    chatHistories[
+      activeCharacter.id
+    ].push({
 
       sender: "ai",
 
@@ -713,7 +1002,25 @@ async function sendMessage() {
     });
 
 
-  } catch (error) {
+    /* AUTO LAUGH */
+
+    if (
+      textContainsLaugh(reply)
+    ) {
+
+      setTimeout(() => {
+
+        playLaughSound();
+
+      }, 120);
+
+    }
+
+
+  }
+
+
+  catch (error) {
 
     console.error(
       "API ERROR:",
@@ -721,30 +1028,46 @@ async function sendMessage() {
     );
 
 
-    chatHistories[activeCharacter.id].push({
+    const errorMessage =
+      error?.message ||
+      "Unknown API error";
+
+
+    chatHistories[
+      activeCharacter.id
+    ].push({
 
       sender: "ai",
 
       text:
-        `API Error: ${error.message || "Unknown API error"}`
+        `API Error: ${errorMessage}`
 
     });
 
+  }
 
-  } finally {
 
-    typing.classList.add("hidden");
+  finally {
+
+    typing.classList.add(
+      "hidden"
+    );
+
 
     requestInFlight = false;
 
+
     sendBtn.disabled = false;
+
 
     sendBtn.classList.remove(
       "opacity-60",
       "cursor-not-allowed"
     );
 
+
     renderChatMessages();
+
 
     input.focus();
 
@@ -753,235 +1076,13 @@ async function sendMessage() {
 }
 
 
-/* =========================================================
-   BANGLA FEMALE VOICE
-========================================================= */
-
-function getBanglaFemaleVoice() {
-
-  if (!("speechSynthesis" in window))
-    return null;
-
-
-  const voices =
-    speechSynthesis.getVoices();
-
-
-  if (!voices || !voices.length)
-    return null;
-
-
-  /*
-     Bengali / Bangla voices
-  */
-
-  const banglaVoices =
-    voices.filter(voice =>
-
-      /^bn(-|_)/i.test(
-        voice.lang
-      )
-
-      ||
-
-      /bengali|bangla|বাংলা/i.test(
-        voice.name
-      )
-
-    );
-
-
-  /*
-     Female voice hints.
-     Exact voice depends on Android/browser.
-  */
-
-  const femaleHints =
-    /female|woman|girl|lady|zira|samantha|google.*female|lekha|tithi|kalpana|ananya|priya|neela/i;
-
-
-  /*
-     First:
-     Bengali + female
-  */
-
-  const banglaFemale =
-    banglaVoices.find(
-      voice =>
-        femaleHints.test(
-          voice.name
-        )
-    );
-
-
-  if (banglaFemale)
-    return banglaFemale;
-
-
-  /*
-     Second:
-     Any Bengali voice
-  */
-
-  if (banglaVoices.length)
-    return banglaVoices[0];
-
-
-  /*
-     Last fallback:
-     any female voice
-  */
-
-  const femaleVoice =
-    voices.find(
-      voice =>
-        femaleHints.test(
-          voice.name
-        )
-    );
-
-
-  return femaleVoice || null;
-
-}
-
-
-/* =========================================================
-   SPEAK BANGLA FEMALE
-========================================================= */
-
-function speakBanglaFemale(
-  text,
-  btn
-) {
-
-  if (!("speechSynthesis" in window))
-    return;
-
-
-  speechSynthesis.cancel();
-
-  resetTTSButtons();
-
-
-  const cleanText =
-    cleanForSpeech(text);
-
-
-  if (!cleanText)
-    return;
-
-
-  const utterance =
-    new SpeechSynthesisUtterance(
-      cleanText
-    );
-
-
-  const voice =
-    getBanglaFemaleVoice();
-
-
-  if (voice) {
-
-    utterance.voice =
-      voice;
-
-    utterance.lang =
-      voice.lang;
-
-  } else {
-
-    utterance.lang =
-      "bn-BD";
-
-  }
-
-
-  /*
-     Female-style voice settings
-  */
-
-  utterance.rate =
-    0.90;
-
-  utterance.pitch =
-    1.15;
-
-  utterance.volume =
-    1;
-
-
-  if (btn) {
-
-    btn.dataset.active =
-      "1";
-
-    btn.innerHTML =
-      '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
-
-  }
-
-
-  utterance.onend =
-    () => {
-
-      resetTTSButtons();
-
-    };
-
-
-  utterance.onerror =
-    () => {
-
-      resetTTSButtons();
-
-    };
-
-
-  speechSynthesis.speak(
-    utterance
-  );
-
-}
-
-
-/* =========================================================
-   TTS BUTTON RESET
-========================================================= */
-
-function resetTTSButtons() {
-
-  document
-    .querySelectorAll(
-      "#chatMessages button"
-    )
-    .forEach(btn => {
-
-      if (
-        btn.dataset.active === "1"
-      ) {
-
-        btn.dataset.active =
-          "0";
-
-        btn.innerHTML =
-          '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
-
-      }
-
-    });
-
-}
-
-
-/* =========================================================
-   CLEAN SPEECH TEXT
-========================================================= */
+/* =========================
+   TEXT CLEANER
+========================= */
 
 function cleanForSpeech(text) {
 
-  return String(text)
+  return text
 
     .replace(
       /[\u{1F300}-\u{1FAFF}]/gu,
@@ -1013,11 +1114,276 @@ function cleanForSpeech(text) {
 }
 
 
-/* =========================================================
-   LOAD VOICES
-========================================================= */
+/* =========================
+   BANGLA FEMALE VOICE
+========================= */
 
-if ("speechSynthesis" in window) {
+function chooseBanglaVoice() {
+
+  if (
+    !("speechSynthesis" in window)
+  )
+    return null;
+
+
+  const voices =
+    speechSynthesis.getVoices();
+
+
+  const bnVoices =
+    voices.filter(v =>
+
+      /^bn(?:-|_)/i.test(
+        v.lang
+      )
+
+      ||
+
+      /bangla|bengali|বাংলা/i.test(
+        v.name
+      )
+
+    );
+
+
+  const femaleHints =
+    /female|woman|girl|female voice|lekha|tithi|kalpana|ananya|aarti|priya|neela/i;
+
+
+  const femaleBangla =
+    bnVoices.find(v =>
+      femaleHints.test(v.name)
+    );
+
+
+  return (
+    femaleBangla ||
+    bnVoices[0] ||
+    null
+  );
+
+}
+
+
+/* =========================
+   LAUGH SOUND
+========================= */
+
+function playLaughSound() {
+
+  if (
+    !("speechSynthesis" in window)
+  )
+    return;
+
+
+  speechSynthesis.cancel();
+
+
+  const laugh =
+    new SpeechSynthesisUtterance(
+      "হা হা হা"
+    );
+
+
+  const voice =
+    chooseBanglaVoice();
+
+
+  if (voice) {
+
+    laugh.voice = voice;
+
+    laugh.lang =
+      voice.lang;
+
+  }
+
+  else {
+
+    laugh.lang =
+      "bn-BD";
+
+  }
+
+
+  laugh.rate =
+    1.05;
+
+
+  laugh.pitch =
+    1.25;
+
+
+  laugh.volume =
+    1;
+
+
+  speechSynthesis.speak(
+    laugh
+  );
+
+}
+
+
+/* =========================
+   DETECT LAUGH
+========================= */
+
+function textContainsLaugh(
+  text
+) {
+
+  return /(?:হা\s*হা|হাহা|হি\s*হি|হিহি|haha|hehe|lol|😂|🤣)/i
+    .test(text);
+
+}
+
+
+/* =========================
+   SPEAK TEXT
+========================= */
+
+function speakText(
+  text,
+  btn
+) {
+
+  if (
+    !("speechSynthesis" in window)
+  )
+    return;
+
+
+  if (
+    speechSynthesis.speaking
+  ) {
+
+    speechSynthesis.cancel();
+
+
+    document
+      .querySelectorAll(
+        "[data-tts-button]"
+      )
+      .forEach(b => {
+
+        b.innerHTML =
+          '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+
+      });
+
+
+    if (
+      btn.dataset.active === "1"
+    ) {
+
+      btn.dataset.active =
+        "0";
+
+      return;
+
+    }
+
+  }
+
+
+  const cleanText =
+    cleanForSpeech(text);
+
+
+  if (!cleanText)
+    return;
+
+
+  const utterance =
+    new SpeechSynthesisUtterance(
+      cleanText
+    );
+
+
+  const voice =
+    chooseBanglaVoice();
+
+
+  if (voice) {
+
+    utterance.voice =
+      voice;
+
+    utterance.lang =
+      voice.lang;
+
+  }
+
+  else {
+
+    utterance.lang =
+      "bn-BD";
+
+  }
+
+
+  /* Female-style settings */
+
+  utterance.rate =
+    0.90;
+
+
+  utterance.pitch =
+    1.15;
+
+
+  utterance.volume =
+    1;
+
+
+  btn.dataset.ttsButton =
+    "1";
+
+
+  btn.dataset.active =
+    "1";
+
+
+  btn.innerHTML =
+    '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
+
+
+  const reset = () => {
+
+    btn.dataset.active =
+      "0";
+
+
+    btn.innerHTML =
+      '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+
+  };
+
+
+  utterance.onend =
+    reset;
+
+
+  utterance.onerror =
+    reset;
+
+
+  speechSynthesis.speak(
+    utterance
+  );
+
+}
+
+
+/* =========================
+   LOAD TTS VOICES
+========================= */
+
+if (
+  "speechSynthesis" in window
+) {
 
   speechSynthesis.onvoiceschanged =
     () => {
@@ -1029,9 +1395,9 @@ if ("speechSynthesis" in window) {
 }
 
 
-/* =========================================================
+/* =========================
    ESCAPE HTML
-========================================================= */
+========================= */
 
 function escapeHtml(str) {
 
@@ -1065,9 +1431,9 @@ function escapeHtml(str) {
 }
 
 
-/* =========================================================
+/* =========================
    START
-========================================================= */
+========================= */
 
 renderCharacters();
 
