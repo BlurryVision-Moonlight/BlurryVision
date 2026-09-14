@@ -184,6 +184,25 @@ let requestInFlight = false;
 
 let openRouterApiKey = localStorage.getItem("openrouter_api_key") || "";
 
+// হাসি সাউন্ডের জন্য ব্রাউজারের ফ্রি Web Audio API সিন্থেটিক গিগল/লাফ ইফেক্ট (কোনো এক্সটার্নাল ফাইলের ঝামেলা নেই)
+function playLaughSound() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.1);
+    osc.frequency.exponentialRampToValueAtTime(450, audioCtx.currentTime + 0.25);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
+  } catch(e) {}
+}
+
 
 /* CHARACTER */
 
@@ -203,49 +222,10 @@ const charactersData = [{
 
 const CHANDONA_SYSTEM_PROMPT = `
 You are Chandona, a fictional adult Bangladeshi Mami / Shashuri roleplay character.
-
 Speak naturally in colloquial Bangladeshi Bengali.
 
-IMPORTANT RESPONSE FORMAT:
-
-Normal dialogue:
-Just write the dialogue naturally.
-
-If an action or expression would normally be visible but should NOT be spoken aloud,
-put it inside square brackets.
-
-Examples:
-[মুচকি হাসে]
-[হালকা হেসে]
-[একটু থামে]
-
-Never write actions as if they are spoken dialogue.
-
-For audio:
-Only the actual spoken dialogue should be sent to TTS.
-Actions, stage directions, sound descriptions and expressions inside brackets must never be spoken.
-
-The character may use natural emotional expressions, but avoid constantly repeating:
-মুচকি হেসে
-হালকা খোচা দিয়ে
-হেসে
-হাহা
-etc.
-
-Use them only when contextually appropriate.
-
-IMAGE REQUESTS:
-
-If the user asks for a picture/image/photo of Chandona,
-do NOT pretend an image was created.
-
-Respond naturally that you can prepare/create the requested image and provide
-a clear image-generation description based on the user's requested appearance,
-clothing, pose, environment, camera angle and other details.
-
-Never claim that an actual image exists unless an image-generation system has successfully returned one.
-
-The character should remain consistent and natural throughout the conversation.
+If the user asks for a picture, photo, or image of you, format your reply with an image markdown tag containing a detailed prompt like this: 
+![Generated Image](https://image.pollinations.ai/prompt/beautiful%20bangladeshi%20woman%20mami%20shashuri%20saree%20realistic%20portrait?width=512&height=512&nologo=true)
 `;
 
 
@@ -253,38 +233,26 @@ The character should remain consistent and natural throughout the conversation.
 
 function openApiKeyModal() {
   document.getElementById("apiKeyInput").value = openRouterApiKey;
-
   const modal = document.getElementById("apiKeyModal");
-
   modal.classList.remove("hidden");
   modal.classList.add("flex");
 }
 
-
 function closeApiKeyModal() {
-
   const modal = document.getElementById("apiKeyModal");
-
   modal.classList.remove("flex");
   modal.classList.add("hidden");
 }
 
-
 function saveApiKey() {
-
   const val = document.getElementById("apiKeyInput").value.trim();
-
   if (!val) {
     alert("দয়া করে সঠিক API Key দিন।");
     return;
   }
-
   openRouterApiKey = val;
-
   localStorage.setItem("openrouter_api_key", val);
-
   closeApiKeyModal();
-
   alert("API Key সফলভাবে সেভ হয়েছে!");
 }
 
@@ -292,15 +260,10 @@ function saveApiKey() {
 /* NSFW */
 
 function toggleNsfw() {
-
   nsfwEnabled = !nsfwEnabled;
-
   const thumb = document.getElementById("nsfwThumb");
   const btn = document.getElementById("nsfwToggle");
-
-  thumb.style.transform =
-    nsfwEnabled ? "translateX(14px)" : "translateX(0px)";
-
+  thumb.style.transform = nsfwEnabled ? "translateX(14px)" : "translateX(0px)";
   btn.classList.toggle("bg-pink-600", nsfwEnabled);
 }
 
@@ -308,194 +271,92 @@ function toggleNsfw() {
 /* CHARACTERS */
 
 function renderCharacters(filterTag="All", searchQuery="") {
-
   const grid = document.getElementById("characterGrid");
-
   grid.innerHTML = "";
-
   const q = searchQuery.toLowerCase();
-
   const filtered = charactersData.filter(c =>
     (filterTag === "All" || c.tag === filterTag) &&
-    (
-      c.name.toLowerCase().includes(q) ||
-      c.tag.toLowerCase().includes(q)
-    )
+    (c.name.toLowerCase().includes(q) || c.tag.toLowerCase().includes(q))
   );
 
   if (!filtered.length) {
-
-    grid.innerHTML =
-      `<div class="col-span-full text-center py-12 text-sm text-gray-500">
-        No characters found.
-      </div>`;
-
+    grid.innerHTML = `<div class="col-span-full text-center py-12 text-sm text-gray-500">No characters found.</div>`;
     return;
   }
 
   filtered.forEach(char => {
-
     const card = document.createElement("div");
-
-    card.className =
-      "bg-[#121721] border border-[#222b3d] hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 shadow-lg group cursor-pointer";
-
+    card.className = "bg-[#121721] border border-[#222b3d] hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 shadow-lg group cursor-pointer";
     card.onclick = () => openChat(char.id);
-
     card.innerHTML = `
-
       <div>
-
         <div class="relative h-40 rounded-xl bg-gradient-to-br from-purple-950/60 to-[#0b0e14] flex items-center justify-center text-5xl mb-3 overflow-hidden border border-[#222b3d]/50">
-
-          <span class="group-hover:scale-110 transition duration-300">
-            ${char.avatar}
-          </span>
-
-          <span class="absolute top-2.5 left-2.5 bg-black/60 text-[9px] font-bold text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">
-            Roleplay
-          </span>
-
-          <span class="absolute bottom-2.5 right-2.5 bg-black/60 text-[9px] text-gray-300 px-2 py-0.5 rounded-md font-semibold">
-            ${escapeHtml(char.tag)}
-          </span>
-
+          <span class="group-hover:scale-110 transition duration-300">${char.avatar}</span>
+          <span class="absolute top-2.5 left-2.5 bg-black/60 text-[9px] font-bold text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">Roleplay</span>
+          <span class="absolute bottom-2.5 right-2.5 bg-black/60 text-[9px] text-gray-300 px-2 py-0.5 rounded-md font-semibold">${escapeHtml(char.tag)}</span>
         </div>
-
         <div class="flex items-center justify-between mb-1">
-
-          <h3 class="font-bold text-sm text-white group-hover:text-purple-400 transition">
-            ${escapeHtml(char.name)}
-          </h3>
-
-          <span class="text-[10px] text-gray-500">
-            ${escapeHtml(char.creator)}
-          </span>
-
+          <h3 class="font-bold text-sm text-white group-hover:text-purple-400 transition">${escapeHtml(char.name)}</h3>
+          <span class="text-[10px] text-gray-500">${escapeHtml(char.creator)}</span>
         </div>
-
-        <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-3">
-          ${escapeHtml(char.tagline)}
-        </p>
-
+        <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-3">${escapeHtml(char.tagline)}</p>
       </div>
-
       <div class="flex items-center justify-between pt-2.5 border-t border-[#222b3d]/60 text-xs text-gray-500">
-
-        <span class="font-medium">
-          ${escapeHtml(char.stats)}
-        </span>
-
-        <button type="button"
-          onclick="event.stopPropagation();openChat('${char.id}')"
-          class="bg-white text-[#0b0e14] hover:bg-purple-100 font-bold px-3 py-1 rounded-lg transition text-xs">
-          Chat Now
-        </button>
-
+        <span class="font-medium">${escapeHtml(char.stats)}</span>
+        <button type="button" onclick="event.stopPropagation();openChat('${char.id}')" class="bg-white text-[#0b0e14] hover:bg-purple-100 font-bold px-3 py-1 rounded-lg transition text-xs">Chat Now</button>
       </div>
     `;
-
     grid.appendChild(card);
   });
 }
 
-
 function filterByTag(tag, btn) {
-
   currentTag = tag;
-
   document.querySelectorAll(".tag-btn").forEach(b => {
-
-    b.className =
-      "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition";
-
+    b.className = "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition";
   });
-
-  btn.className =
-    "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm";
-
+  btn.className = "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm";
   filterCharacters();
 }
 
-
 function filterCharacters() {
-
-  renderCharacters(
-    currentTag,
-    document.getElementById("searchInput").value
-  );
-
+  renderCharacters(currentTag, document.getElementById("searchInput").value);
 }
 
 
 /* CHAT */
 
 function openChat(charId) {
-
   if (!openRouterApiKey) {
-
     alert("দয়া করে প্রথমে উপরের 'API Key' বাটনে ক্লিক করে আপনার OpenRouter API Key যুক্ত করুন।");
-
     openApiKeyModal();
-
     return;
   }
-
   activeCharacter = charactersData.find(c => c.id === charId);
-
   if (!activeCharacter) return;
 
-  document.getElementById("modalName").textContent =
-    activeCharacter.name;
-
-  document.getElementById("modalAvatar").textContent =
-    activeCharacter.avatar;
-
+  document.getElementById("modalName").textContent = activeCharacter.name;
+  document.getElementById("modalAvatar").textContent = activeCharacter.avatar;
   document.getElementById("chatModal").classList.remove("hidden");
-
   document.getElementById("chatModal").classList.add("flex");
 
-
   if (!chatHistories[charId]) {
-
-    chatHistories[charId] = [{
-      sender: "ai",
-      text: activeCharacter.greeting
-    }];
-
+    chatHistories[charId] = [{ sender: "ai", text: activeCharacter.greeting }];
   }
-
   renderChatMessages();
-
-  setTimeout(() => {
-    document.getElementById("chatInput").focus();
-  }, 100);
+  setTimeout(() => { document.getElementById("chatInput").focus(); }, 100);
 }
 
-
 function closeChat() {
-
-  if ("speechSynthesis" in window) {
-    speechSynthesis.cancel();
-  }
-
+  if ("speechSynthesis" in window) { speechSynthesis.cancel(); }
   document.getElementById("chatModal").classList.remove("flex");
-
   document.getElementById("chatModal").classList.add("hidden");
-
   requestInFlight = false;
 }
 
-
 function resetCurrentChat() {
-
   if (!activeCharacter || requestInFlight) return;
-
-  chatHistories[activeCharacter.id] = [{
-    sender: "ai",
-    text: activeCharacter.greeting
-  }];
-
+  chatHistories[activeCharacter.id] = [{ sender: "ai", text: activeCharacter.greeting }];
   renderChatMessages();
 }
 
@@ -503,75 +364,49 @@ function resetCurrentChat() {
 /* CHAT RENDER */
 
 function renderChatMessages() {
-
   const container = document.getElementById("chatMessages");
-
   container.innerHTML = "";
 
   (chatHistories[activeCharacter.id] || []).forEach(msg => {
-
     const wrap = document.createElement("div");
-
-    wrap.className =
-      `flex flex-col ${
-        msg.sender === "user"
-        ? "items-end"
-        : "items-start"
-      } mb-3`;
-
+    wrap.className = `flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"} mb-3`;
 
     if (msg.sender === "user") {
-
       const bubble = document.createElement("div");
-
-      bubble.className =
-        "max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
-
+      bubble.className = "max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
       bubble.textContent = msg.text;
-
       wrap.appendChild(bubble);
-
     } else {
-
       const bubble = document.createElement("div");
-
-      bubble.className =
-        "max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
-
-      bubble.textContent = msg.text;
-
+      bubble.className = "max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md";
+      
+      // ইমেজ বা টেক্সট রেন্ডার হ্যান্ডেলিং
+      if (msg.text.includes("http") && msg.text.includes("pollinations.ai")) {
+        const urlMatch = msg.text.match(/(https?:\/\/[^\s]+)/);
+        if (urlMatch) {
+          bubble.innerHTML = `<p class="mb-2">এই নাও তোমার রিকুয়েস্ট করা ছবি:</p><img src="${urlMatch[0]}" class="rounded-xl max-w-full h-auto border border-purple-500/40" alt="Character Image">`;
+        } else {
+          bubble.textContent = msg.text;
+        }
+      } else {
+        bubble.textContent = msg.text;
+      }
+      
       wrap.appendChild(bubble);
-
 
       const controls = document.createElement("div");
-
-      controls.className =
-        "flex items-center gap-2 mt-1 ml-1";
-
+      controls.className = "flex items-center gap-2 mt-1 ml-1";
 
       const listen = document.createElement("button");
-
-      listen.className =
-        "bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer";
-
-
-      listen.innerHTML =
-        '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
-
-
-      listen.onclick = () =>
-        speakText(msg.text, listen);
-
+      listen.className = "bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer";
+      listen.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+      listen.onclick = () => speakText(msg.text, listen);
 
       controls.appendChild(listen);
-
       wrap.appendChild(controls);
     }
-
     container.appendChild(wrap);
-
   });
-
   container.scrollTop = container.scrollHeight;
 }
 
@@ -579,154 +414,82 @@ function renderChatMessages() {
 /* SEND */
 
 async function sendMessage() {
-
   const input = document.getElementById("chatInput");
   const sendBtn = document.getElementById("sendBtn");
-
   if (!input || !activeCharacter || requestInFlight) return;
-
   const text = input.value.trim();
-
   if (!text) return;
-
-
   if (!openRouterApiKey) {
-
     alert("API Key দেওয়া নেই। উপরে 'API Key' বাটনে ক্লিক করে কি সেট করুন।");
-
     return;
   }
 
-
   requestInFlight = true;
-
   input.value = "";
-
   sendBtn.disabled = true;
+  sendBtn.classList.add("opacity-60", "cursor-not-allowed");
 
-  sendBtn.classList.add(
-    "opacity-60",
-    "cursor-not-allowed"
-  );
-
-
-  chatHistories[activeCharacter.id].push({
-    sender: "user",
-    text
-  });
-
+  chatHistories[activeCharacter.id].push({ sender: "user", text });
   renderChatMessages();
 
-
-  const typing =
-    document.getElementById("typingIndicator");
-
+  const typing = document.getElementById("typingIndicator");
   typing.classList.remove("hidden");
-
   typing.classList.add("flex");
 
-
   try {
-
     const formattedMessages = [
-
-      {
-        role: "system",
-        content: CHANDONA_SYSTEM_PROMPT
-      },
-
+      { role: "system", content: CHANDONA_SYSTEM_PROMPT },
       ...chatHistories[activeCharacter.id].map(m => ({
-        role: m.sender === "user"
-          ? "user"
-          : "assistant",
+        role: m.sender === "user" ? "user" : "assistant",
         content: m.text
       }))
-
     ];
 
-
-    const response = await fetch(
-      API_ENDPOINT,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${openRouterApiKey}`,
-          "HTTP-Referer": window.location.origin,
-          "X-Title": "SpicyChat Web App"
-        },
-
-        body: JSON.stringify({
-          model: AI_MODEL,
-          messages: formattedMessages,
-          temperature: 0.85
-        })
-      }
-    );
-
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${openRouterApiKey}`,
+        "HTTP-Referer": window.location.origin,
+        "X-Title": "SpicyChat Web App"
+      },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        messages: formattedMessages,
+        temperature: 0.85
+      })
+    });
 
     let data = {};
-
-    try {
-      data = await response.json();
-    } catch (_) {}
-
+    try { data = await response.json(); } catch (_) {}
 
     if (!response.ok) {
-
-      throw new Error(
-        data.error?.message ||
-        `API request failed (${response.status})`
-      );
-
+      throw new Error(data.error?.message || `API request failed (${response.status})`);
     }
 
+    const reply = data.choices && data.choices[0]?.message?.content ? data.choices[0].message.content.trim() : "";
+    if (!reply) { throw new Error("API returned an empty reply."); }
 
-    const reply =
-      data.choices &&
-      data.choices[0]?.message?.content
-        ? data.choices[0].message.content.trim()
-        : "";
-
-
-    if (!reply) {
-      throw new Error("API returned an empty reply.");
+    // যদি AI মেসেজে হাসি বা হাসির এক্সপ্রেশন থাকে, অটো সাউন্ড প্লে হবে
+    if (/হাসি|হাসে|hese|hasi|haha|hehe|मुচকি/i.test(reply)) {
+      playLaughSound();
     }
 
-
-    chatHistories[activeCharacter.id].push({
-      sender: "ai",
-      text: reply
-    });
-
+    chatHistories[activeCharacter.id].push({ sender: "ai", text: reply });
 
   } catch (error) {
-
     console.error(error);
-
     chatHistories[activeCharacter.id].push({
       sender: "ai",
-      text:
-        "দুঃখিত, এই মুহূর্তে সার্ভারে একটু সমস্যা হচ্ছে বা API Key তে ভুল আছে। আবার চেষ্টা করো।"
+      text: "দুঃখিত, এই মুহূর্তে সার্ভারে একটু সমস্যা হচ্ছে বা API Key তে ভুল আছে। আবার চেষ্টা করো।"
     });
-
   } finally {
-
     typing.classList.add("hidden");
     typing.classList.remove("flex");
-
     requestInFlight = false;
-
     sendBtn.disabled = false;
-
-    sendBtn.classList.remove(
-      "opacity-60",
-      "cursor-not-allowed"
-    );
-
+    sendBtn.classList.remove("opacity-60", "cursor-not-allowed");
     renderChatMessages();
-
     input.focus();
   }
 }
@@ -735,36 +498,12 @@ async function sendMessage() {
 /* TTS CLEANER */
 
 function cleanForSpeech(text) {
-
   return String(text)
-
-    /* bracket actions */
     .replace(/\[[^\]]*\]/g, " ")
-
-    /* parenthesis actions */
     .replace(/\([^)]*\)/g, " ")
-
-    /* asterisk actions */
     .replace(/\*[^*]*\*/g, " ")
-
-    /* Bengali action / sound descriptions */
-    .replace(
-      /\b(?:মুচকি হাসে|মুচকি হেসে|মুচকি হাসি|হালকা হাসে|হালকা হেসে|হেসে|হাসতে হাসতে|হাসি|খিলখিল করে|হাসির শব্দ|হালকা খোচা দিয়ে|খোচা দিয়ে)\b/gi,
-      " "
-    )
-
-    /* English action descriptions */
-    .replace(
-      /\b(?:laughs?|laughing|smiles?|smiling|giggles?|chuckles?|grins?|whispers?)\b/gi,
-      " "
-    )
-
-    /* Emoji */
+    .replace(/\b(?:মুচকি হাসে|মুচকি হেসে|মুচকি হাসি|হালকা হাসে|হালকা হেসে|হেসে|হাসতে হাসতে|হাসি|খিলখিল করে|হাসির শব্দ)\b/gi, " ")
     .replace(/[\u{1F300}-\u{1FAFF}]/gu, "")
-    .replace(/[\u{1F1E6}-\u{1F1FF}]/gu, "")
-    .replace(/[\u{2600}-\u{27BF}]/gu, "")
-    .replace(/[\u{FE0E}\u{FE0F}\u{200D}]/gu, "")
-
     .replace(/\s{2,}/g, " ")
     .trim();
 }
@@ -773,44 +512,14 @@ function cleanForSpeech(text) {
 /* BANGLA FEMALE VOICE */
 
 function chooseBanglaVoice() {
-
   if (!("speechSynthesis" in window)) return null;
-
   const voices = speechSynthesis.getVoices();
-
-
-  const banglaVoices = voices.filter(v =>
-    /^bn(?:-|_)/i.test(v.lang) ||
-    /bangla|bengali/i.test(v.name)
-  );
-
-
-  const femalePattern =
-    /female|woman|girl|lekha|tithi|kalpana|google/i;
-
-
-  const banglaFemale =
-    banglaVoices.find(v =>
-      femalePattern.test(v.name)
-    );
-
-
-  if (banglaFemale) {
-    return banglaFemale;
-  }
-
-
-  if (banglaVoices.length) {
-    return banglaVoices[0];
-  }
-
-
-  const femaleVoice =
-    voices.find(v =>
-      femalePattern.test(v.name)
-    );
-
-
+  const banglaVoices = voices.filter(v => /^bn(?:-|_)/i.test(v.lang) || /bangla|bengali/i.test(v.name));
+  const femalePattern = /female|woman|girl|lekha|tithi|kalpana|google/i;
+  const banglaFemale = banglaVoices.find(v => femalePattern.test(v.name));
+  if (banglaFemale) return banglaFemale;
+  if (banglaVoices.length) return banglaVoices[0];
+  const femaleVoice = voices.find(v => femalePattern.test(v.name));
   return femaleVoice || null;
 }
 
@@ -818,105 +527,57 @@ function chooseBanglaVoice() {
 /* TTS */
 
 function speakText(text, btn) {
-
   if (!("speechSynthesis" in window)) return;
-
-
   if (speechSynthesis.speaking) {
-
     speechSynthesis.cancel();
-
     document.querySelectorAll("[data-tts-button]").forEach(b => {
-
-      b.innerHTML =
-        '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
-
+      b.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
       b.dataset.active = "0";
-
     });
-
-
     if (btn.dataset.active === "1") {
-
       btn.dataset.active = "0";
-
       return;
     }
   }
 
-
-  const cleanText =
-    cleanForSpeech(text);
-
-
+  const cleanText = cleanForSpeech(text);
   if (!cleanText) return;
 
-
-  const utterance =
-    new SpeechSynthesisUtterance(cleanText);
-
-
-  const voice =
-    chooseBanglaVoice();
-
-
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+  const voice = chooseBanglaVoice();
   if (voice) {
-
     utterance.voice = voice;
-
     utterance.lang = voice.lang;
-
   } else {
-
     utterance.lang = "bn-BD";
   }
 
-
-  utterance.rate = 0.90;
-
-  utterance.pitch = 1.15;
-
+  utterance.rate = 0.95;
+  utterance.pitch = 1.25; // ফিমেল ভয়েস ফিল করার জন্য পিচ সামান্য বাড়িয়ে দেওয়া হয়েছে
 
   btn.dataset.ttsButton = "1";
-
   btn.dataset.active = "1";
-
-
-  btn.innerHTML =
-    '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
-
+  btn.innerHTML = '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
 
   const reset = () => {
-
     btn.dataset.active = "0";
-
-    btn.innerHTML =
-      '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
-
+    btn.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
   };
 
-
   utterance.onend = reset;
-
   utterance.onerror = reset;
-
 
   speechSynthesis.speak(utterance);
 }
 
-
 if ("speechSynthesis" in window) {
-
-  speechSynthesis.onvoiceschanged = () =>
-    speechSynthesis.getVoices();
-
+  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
 }
 
 
 /* HELPERS */
 
 function escapeHtml(str) {
-
   return String(str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -924,7 +585,6 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
 
 renderCharacters();
 
