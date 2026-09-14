@@ -7,6 +7,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="bg-[#0b0e14] text-gray-100 font-sans min-h-screen flex flex-col">
 
 <header class="sticky top-0 z-40 bg-[#0b0e14]/90 backdrop-blur-md border-b border-[#222b3d] px-4 lg:px-8 h-16 flex items-center justify-between">
@@ -16,96 +17,164 @@
       <span class="text-xs bg-purple-950 border border-purple-800 text-purple-300 px-2 py-0.5 rounded-full font-semibold">AI v4.0</span>
     </a>
   </div>
+
   <div class="flex items-center gap-3">
-    <!-- API Key Button -->
     <button onclick="openApiKeyModal()" class="bg-[#121721] border border-[#222b3d] hover:border-purple-500 text-gray-300 text-xs px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition">
       <i class="fa-solid fa-key text-purple-400"></i>
       <span class="hidden sm:inline">API Key</span>
     </button>
+
     <div class="flex items-center gap-1.5 bg-[#121721] border border-[#222b3d] px-2.5 py-1.5 rounded-full">
       <span class="text-[11px] font-bold text-pink-400 tracking-wider">NSFW</span>
-      <button id="nsfwToggle" onclick="toggleNsfw()" aria-label="Toggle NSFW" class="w-8 h-4.5 bg-pink-600 rounded-full relative transition flex items-center px-0.5 cursor-pointer">
+      <button id="nsfwToggle" onclick="toggleNsfw()" aria-label="Toggle NSFW"
+        class="w-8 h-4.5 bg-pink-600 rounded-full relative transition flex items-center px-0.5 cursor-pointer">
         <div id="nsfwThumb" class="w-3.5 h-3.5 bg-white rounded-full transition-transform transform translate-x-3.5"></div>
       </button>
     </div>
-    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center font-bold text-xs text-white shadow">DF</div>
+
+    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center font-bold text-xs text-white shadow">
+      DF
+    </div>
   </div>
 </header>
 
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex flex-col gap-6">
+
   <section class="flex flex-col gap-4">
     <div>
       <h1 class="text-2xl md:text-3xl font-black tracking-tight">Explore AI Characters</h1>
-      <p class="text-sm text-gray-400 mt-1">Immerse yourself in dynamic, human-like conversations and multilingual roleplay.</p>
+      <p class="text-sm text-gray-400 mt-1">
+        Immerse yourself in dynamic, human-like conversations and multilingual roleplay.
+      </p>
     </div>
+
     <div class="relative w-full">
       <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-      <input id="searchInput" type="text" placeholder="Search characters..." oninput="filterCharacters()" class="w-full bg-[#121721] border border-[#222b3d] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition">
+      <input id="searchInput" type="text" placeholder="Search characters..."
+        oninput="filterCharacters()"
+        class="w-full bg-[#121721] border border-[#222b3d] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition">
     </div>
+
     <div id="tagFilters" class="flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold">
-      <button onclick="filterByTag('All', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm">🔥 All</button>
-      <button onclick="filterByTag('Mami / Shashuri', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition">🌸 Mami / Shashuri</button>
+      <button onclick="filterByTag('All', this)"
+        class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm">
+        🔥 All
+      </button>
+
+      <button onclick="filterByTag('Mami / Shashuri', this)"
+        class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition">
+        🌸 Mami / Shashuri
+      </button>
     </div>
   </section>
+
   <section class="pb-12">
     <div id="characterGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </section>
+
 </main>
 
-<!-- API Key Input Modal -->
+<!-- API KEY MODAL -->
 <div id="apiKeyModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
   <div class="w-full max-w-md bg-[#121721] border border-[#222b3d] rounded-2xl p-6 flex flex-col gap-4 shadow-2xl">
+
     <div class="flex items-center justify-between">
       <h3 class="font-bold text-base text-white flex items-center gap-2">
-        <i class="fa-solid fa-key text-purple-400"></i> OpenRouter API Key
+        <i class="fa-solid fa-key text-purple-400"></i>
+        OpenRouter API Key
       </h3>
-      <button onclick="closeApiKeyModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+
+      <button onclick="closeApiKeyModal()" class="text-gray-400 hover:text-white">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
-    <p class="text-xs text-gray-400">আপনার OpenRouter API Key এখানে প্রদান করুন। এটি আপনার ব্রাউজারে সেভ থাকবে এবং নিরাপদ থাকবে।</p>
-    <input id="apiKeyInput" type="password" placeholder="sk-or-v1-..." class="w-full bg-[#0b0e14] border border-[#222b3d] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500">
-    <button onclick="saveApiKey()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 py-3 rounded-xl font-bold text-sm text-white shadow-lg transition">Save Key</button>
+
+    <p class="text-xs text-gray-400">
+      আপনার OpenRouter API Key এখানে প্রদান করুন।
+    </p>
+
+    <input id="apiKeyInput" type="password" placeholder="sk-or-v1-..."
+      class="w-full bg-[#0b0e14] border border-[#222b3d] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500">
+
+    <button onclick="saveApiKey()"
+      class="w-full bg-gradient-to-r from-purple-600 to-pink-600 py-3 rounded-xl font-bold text-sm text-white shadow-lg transition">
+      Save Key
+    </button>
+
   </div>
 </div>
 
+<!-- CHAT MODAL -->
 <div id="chatModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex-col justify-end md:items-center md:justify-center p-0 md:p-4">
+
   <div class="w-full h-full md:max-w-3xl md:h-[85vh] bg-[#121721] border border-[#222b3d] md:rounded-2xl flex flex-col overflow-hidden shadow-2xl">
+
     <div class="h-16 px-4 bg-[#0b0e14] border-b border-[#222b3d] flex items-center justify-between shrink-0">
+
       <div class="flex items-center gap-3">
-        <div id="modalAvatar" class="w-10 h-10 rounded-xl bg-purple-900 flex items-center justify-center text-xl">🌙</div>
+
+        <div id="modalAvatar"
+          class="w-10 h-10 rounded-xl bg-purple-900 flex items-center justify-center text-xl">
+          🌙
+        </div>
+
         <div>
           <h3 id="modalName" class="font-bold text-sm text-white">Chandona</h3>
+
           <div class="flex items-center gap-1.5 mt-0.5">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-[11px] text-gray-400">Online · Mami / Shashuri Roleplay</span>
+            <span class="text-[11px] text-gray-400">
+              Online · Mami / Shashuri Roleplay
+            </span>
           </div>
         </div>
+
       </div>
+
       <div class="flex items-center gap-2">
-        <button onclick="resetCurrentChat()" class="text-xs bg-[#0b0e14] border border-[#222b3d] text-gray-300 px-3 py-1.5 rounded-lg">Restart</button>
-        <button onclick="closeChat()" class="w-9 h-9 rounded-xl bg-[#0b0e14] border border-[#222b3d] text-gray-400 hover:text-white flex items-center justify-center">
+
+        <button onclick="resetCurrentChat()"
+          class="text-xs bg-[#0b0e14] border border-[#222b3d] text-gray-300 px-3 py-1.5 rounded-lg">
+          Restart
+        </button>
+
+        <button onclick="closeChat()"
+          class="w-9 h-9 rounded-xl bg-[#0b0e14] border border-[#222b3d] text-gray-400 hover:text-white flex items-center justify-center">
           <i class="fa-solid fa-xmark"></i>
         </button>
+
       </div>
     </div>
+
     <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
-    <div id="typingIndicator" class="hidden px-4 py-2 text-xs text-gray-400 flex items-center gap-2">
+
+    <div id="typingIndicator" class="hidden px-4 py-2 text-xs text-gray-400 items-center gap-2">
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce"></span>
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
       <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
       <span class="italic ml-1">চন্দনা লিখছে...</span>
     </div>
+
     <div class="p-3 bg-[#0b0e14] border-t border-[#222b3d] flex items-center gap-2 shrink-0">
-      <input id="chatInput" type="text" placeholder="চন্দনার সাথে কথা বলুন..." onkeydown="if(event.key==='Enter')sendMessage()" class="flex-1 bg-[#121721] border border-[#222b3d] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500">
-      <button id="sendBtn" onclick="sendMessage()" class="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center">
+
+      <input id="chatInput" type="text"
+        placeholder="চন্দনার সাথে কথা বলুন..."
+        onkeydown="if(event.key==='Enter')sendMessage()"
+        class="flex-1 bg-[#121721] border border-[#222b3d] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500">
+
+      <button id="sendBtn" onclick="sendMessage()"
+        class="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 rounded-xl font-bold text-sm text-white shadow-lg flex items-center justify-center">
         <i class="fa-solid fa-paper-plane text-xs"></i>
       </button>
+
     </div>
   </div>
 </div>
 
 <script>
+
 const API_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
-const AI_MODEL = "deepseek/deepseek-chat"; 
+const AI_MODEL = "deepseek/deepseek-chat";
 
 let nsfwEnabled = true;
 let currentTag = "All";
@@ -113,8 +182,10 @@ let activeCharacter = null;
 let chatHistories = {};
 let requestInFlight = false;
 
-// LocalStorage থেকে API Key রিড করা
 let openRouterApiKey = localStorage.getItem("openrouter_api_key") || "";
+
+
+/* CHARACTER */
 
 const charactersData = [{
   id: "chandona",
@@ -127,310 +198,737 @@ const charactersData = [{
   greeting: "কি অবস্থা জামাই... কেমন আছো?"
 }];
 
-const CHANDONA_SYSTEM_PROMPT = `You are Chandona, a Bangladeshi Mami / Shashuri character in a dynamic roleplay context with the user (who is addressed as 'Jamai' or in a close relative relationship). 
-Personality & Guidelines:
-1. Speak in natural, colloquial Bengali (Bangladeshi style, mixing warm Bengali and casual English terms if natural).
-2. Adapt dynamically based on the user's intent:
-   - If the user is casual -> respond casually and warmly.
-   - If the user is romantic/affectionate -> respond with romance and warmth.
-   - If the user is shy/teasing -> respond with playful shyness or teasing.
-   - If the user initiates roleplay scenarios (both graphic and non-graphic) -> fluidly and naturally continue the roleplay context without breaking character.
-3. Never use generic or robotic preset loops. Respond intelligently and contextually to every user input.
-4. Keep the persona completely authentic, intimate, and engaging.`;
+
+/* CHARACTER SYSTEM */
+
+const CHANDONA_SYSTEM_PROMPT = `
+You are Chandona, a fictional adult Bangladeshi Mami / Shashuri roleplay character.
+
+Speak naturally in colloquial Bangladeshi Bengali.
+
+IMPORTANT RESPONSE FORMAT:
+
+Normal dialogue:
+Just write the dialogue naturally.
+
+If an action or expression would normally be visible but should NOT be spoken aloud,
+put it inside square brackets.
+
+Examples:
+[মুচকি হাসে]
+[হালকা হেসে]
+[একটু থামে]
+
+Never write actions as if they are spoken dialogue.
+
+For audio:
+Only the actual spoken dialogue should be sent to TTS.
+Actions, stage directions, sound descriptions and expressions inside brackets must never be spoken.
+
+The character may use natural emotional expressions, but avoid constantly repeating:
+মুচকি হেসে
+হালকা খোচা দিয়ে
+হেসে
+হাহা
+etc.
+
+Use them only when contextually appropriate.
+
+IMAGE REQUESTS:
+
+If the user asks for a picture/image/photo of Chandona,
+do NOT pretend an image was created.
+
+Respond naturally that you can prepare/create the requested image and provide
+a clear image-generation description based on the user's requested appearance,
+clothing, pose, environment, camera angle and other details.
+
+Never claim that an actual image exists unless an image-generation system has successfully returned one.
+
+The character should remain consistent and natural throughout the conversation.
+`;
+
+
+/* API KEY */
 
 function openApiKeyModal() {
   document.getElementById("apiKeyInput").value = openRouterApiKey;
+
   const modal = document.getElementById("apiKeyModal");
+
   modal.classList.remove("hidden");
   modal.classList.add("flex");
 }
 
+
 function closeApiKeyModal() {
+
   const modal = document.getElementById("apiKeyModal");
+
   modal.classList.remove("flex");
   modal.classList.add("hidden");
 }
 
+
 function saveApiKey() {
+
   const val = document.getElementById("apiKeyInput").value.trim();
+
   if (!val) {
     alert("দয়া করে সঠিক API Key দিন।");
     return;
   }
+
   openRouterApiKey = val;
+
   localStorage.setItem("openrouter_api_key", val);
+
   closeApiKeyModal();
+
   alert("API Key সফলভাবে সেভ হয়েছে!");
 }
 
+
+/* NSFW */
+
 function toggleNsfw() {
+
   nsfwEnabled = !nsfwEnabled;
+
   const thumb = document.getElementById("nsfwThumb");
   const btn = document.getElementById("nsfwToggle");
-  thumb.style.transform = nsfwEnabled ? "translateX(14px)" : "translateX(0px)";
+
+  thumb.style.transform =
+    nsfwEnabled ? "translateX(14px)" : "translateX(0px)";
+
   btn.classList.toggle("bg-pink-600", nsfwEnabled);
 }
 
+
+/* CHARACTERS */
+
 function renderCharacters(filterTag="All", searchQuery="") {
+
   const grid = document.getElementById("characterGrid");
+
   grid.innerHTML = "";
+
   const q = searchQuery.toLowerCase();
+
   const filtered = charactersData.filter(c =>
     (filterTag === "All" || c.tag === filterTag) &&
-    (c.name.toLowerCase().includes(q) || c.tag.toLowerCase().includes(q))
+    (
+      c.name.toLowerCase().includes(q) ||
+      c.tag.toLowerCase().includes(q)
+    )
   );
 
   if (!filtered.length) {
-    grid.innerHTML = `<div class="col-span-full text-center py-12 text-sm text-gray-500">No characters found.</div>`;
+
+    grid.innerHTML =
+      `<div class="col-span-full text-center py-12 text-sm text-gray-500">
+        No characters found.
+      </div>`;
+
     return;
   }
 
   filtered.forEach(char => {
+
     const card = document.createElement("div");
-    card.className = "bg-[#121721] border border-[#222b3d] hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 shadow-lg group cursor-pointer";
+
+    card.className =
+      "bg-[#121721] border border-[#222b3d] hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 shadow-lg group cursor-pointer";
+
     card.onclick = () => openChat(char.id);
+
     card.innerHTML = `
+
       <div>
+
         <div class="relative h-40 rounded-xl bg-gradient-to-br from-purple-950/60 to-[#0b0e14] flex items-center justify-center text-5xl mb-3 overflow-hidden border border-[#222b3d]/50">
-          <span class="group-hover:scale-110 transition duration-300">${char.avatar}</span>
-          <span class="absolute top-2.5 left-2.5 bg-black/60 text-[9px] font-bold text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">Roleplay</span>
-          <span class="absolute bottom-2.5 right-2.5 bg-black/60 text-[9px] text-gray-300 px-2 py-0.5 rounded-md font-semibold">${escapeHtml(char.tag)}</span>
+
+          <span class="group-hover:scale-110 transition duration-300">
+            ${char.avatar}
+          </span>
+
+          <span class="absolute top-2.5 left-2.5 bg-black/60 text-[9px] font-bold text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">
+            Roleplay
+          </span>
+
+          <span class="absolute bottom-2.5 right-2.5 bg-black/60 text-[9px] text-gray-300 px-2 py-0.5 rounded-md font-semibold">
+            ${escapeHtml(char.tag)}
+          </span>
+
         </div>
+
         <div class="flex items-center justify-between mb-1">
-          <h3 class="font-bold text-sm text-white group-hover:text-purple-400 transition">${escapeHtml(char.name)}</h3>
-          <span class="text-[10px] text-gray-500">${escapeHtml(char.creator)}</span>
+
+          <h3 class="font-bold text-sm text-white group-hover:text-purple-400 transition">
+            ${escapeHtml(char.name)}
+          </h3>
+
+          <span class="text-[10px] text-gray-500">
+            ${escapeHtml(char.creator)}
+          </span>
+
         </div>
-        <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-3">${escapeHtml(char.tagline)}</p>
+
+        <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-3">
+          ${escapeHtml(char.tagline)}
+        </p>
+
       </div>
+
       <div class="flex items-center justify-between pt-2.5 border-t border-[#222b3d]/60 text-xs text-gray-500">
-        <span class="font-medium">${escapeHtml(char.stats)}</span>
-        <button type="button" onclick="event.stopPropagation();openChat('${char.id}')" class="bg-white text-[#0b0e14] hover:bg-purple-100 font-bold px-3 py-1 rounded-lg transition text-xs">Chat Now</button>
-      </div>`;
+
+        <span class="font-medium">
+          ${escapeHtml(char.stats)}
+        </span>
+
+        <button type="button"
+          onclick="event.stopPropagation();openChat('${char.id}')"
+          class="bg-white text-[#0b0e14] hover:bg-purple-100 font-bold px-3 py-1 rounded-lg transition text-xs">
+          Chat Now
+        </button>
+
+      </div>
+    `;
+
     grid.appendChild(card);
   });
 }
 
+
 function filterByTag(tag, btn) {
+
   currentTag = tag;
-  document.querySelectorAll(".tag-btn").forEach(b => b.className =
-    "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition");
-  btn.className = "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm";
+
+  document.querySelectorAll(".tag-btn").forEach(b => {
+
+    b.className =
+      "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721] border border-[#222b3d] text-gray-300 hover:text-white transition";
+
+  });
+
+  btn.className =
+    "tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm";
+
   filterCharacters();
 }
 
+
 function filterCharacters() {
-  renderCharacters(currentTag, document.getElementById("searchInput").value);
+
+  renderCharacters(
+    currentTag,
+    document.getElementById("searchInput").value
+  );
+
 }
+
+
+/* CHAT */
 
 function openChat(charId) {
+
   if (!openRouterApiKey) {
+
     alert("দয়া করে প্রথমে উপরের 'API Key' বাটনে ক্লিক করে আপনার OpenRouter API Key যুক্ত করুন।");
+
     openApiKeyModal();
+
     return;
   }
+
   activeCharacter = charactersData.find(c => c.id === charId);
+
   if (!activeCharacter) return;
-  document.getElementById("modalName").textContent = activeCharacter.name;
-  document.getElementById("modalAvatar").textContent = activeCharacter.avatar;
+
+  document.getElementById("modalName").textContent =
+    activeCharacter.name;
+
+  document.getElementById("modalAvatar").textContent =
+    activeCharacter.avatar;
+
   document.getElementById("chatModal").classList.remove("hidden");
+
   document.getElementById("chatModal").classList.add("flex");
 
+
   if (!chatHistories[charId]) {
-    chatHistories[charId] = [{ sender: "ai", text: activeCharacter.greeting }];
+
+    chatHistories[charId] = [{
+      sender: "ai",
+      text: activeCharacter.greeting
+    }];
+
   }
+
   renderChatMessages();
-  setTimeout(() => document.getElementById("chatInput").focus(), 100);
+
+  setTimeout(() => {
+    document.getElementById("chatInput").focus();
+  }, 100);
 }
 
+
 function closeChat() {
-  if ("speechSynthesis" in window) speechSynthesis.cancel();
+
+  if ("speechSynthesis" in window) {
+    speechSynthesis.cancel();
+  }
+
   document.getElementById("chatModal").classList.remove("flex");
+
   document.getElementById("chatModal").classList.add("hidden");
+
   requestInFlight = false;
 }
 
+
 function resetCurrentChat() {
-  if (!activeCharacter) return;
-  if (requestInFlight) return;
-  chatHistories[activeCharacter.id] = [{ sender: "ai", text: activeCharacter.greeting }];
+
+  if (!activeCharacter || requestInFlight) return;
+
+  chatHistories[activeCharacter.id] = [{
+    sender: "ai",
+    text: activeCharacter.greeting
+  }];
+
   renderChatMessages();
 }
 
+
+/* CHAT RENDER */
+
 function renderChatMessages() {
+
   const container = document.getElementById("chatMessages");
+
   container.innerHTML = "";
 
-  (chatHistories[activeCharacter.id] || []).forEach((msg) => {
+  (chatHistories[activeCharacter.id] || []).forEach(msg => {
+
     const wrap = document.createElement("div");
-    wrap.className = `flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"} mb-3`;
+
+    wrap.className =
+      `flex flex-col ${
+        msg.sender === "user"
+        ? "items-end"
+        : "items-start"
+      } mb-3`;
+
 
     if (msg.sender === "user") {
+
       const bubble = document.createElement("div");
-      bubble.className = "max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
+
+      bubble.className =
+        "max-w-[85%] bg-purple-600 text-white rounded-2xl rounded-br-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
+
       bubble.textContent = msg.text;
-      wrap.appendChild(bubble);
-    } else {
-      const bubble = document.createElement("div");
-      bubble.className = "max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
-      bubble.textContent = msg.text;
+
       wrap.appendChild(bubble);
 
+    } else {
+
+      const bubble = document.createElement("div");
+
+      bubble.className =
+        "max-w-[85%] bg-[#121721] border border-[#222b3d] text-gray-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-xs md:text-sm leading-relaxed shadow-md whitespace-pre-wrap";
+
+      bubble.textContent = msg.text;
+
+      wrap.appendChild(bubble);
+
+
       const controls = document.createElement("div");
-      controls.className = "flex items-center gap-2 mt-1 ml-1";
+
+      controls.className =
+        "flex items-center gap-2 mt-1 ml-1";
+
+
       const listen = document.createElement("button");
-      listen.className = "bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer";
-      listen.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
-      listen.onclick = () => speakText(msg.text, listen);
+
+      listen.className =
+        "bg-[#0b0e14] border border-[#222b3d] hover:border-gray-600 text-gray-400 hover:text-white text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer";
+
+
+      listen.innerHTML =
+        '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+
+
+      listen.onclick = () =>
+        speakText(msg.text, listen);
+
+
       controls.appendChild(listen);
+
       wrap.appendChild(controls);
     }
+
     container.appendChild(wrap);
+
   });
+
   container.scrollTop = container.scrollHeight;
 }
 
+
+/* SEND */
+
 async function sendMessage() {
+
   const input = document.getElementById("chatInput");
   const sendBtn = document.getElementById("sendBtn");
+
   if (!input || !activeCharacter || requestInFlight) return;
 
   const text = input.value.trim();
+
   if (!text) return;
 
+
   if (!openRouterApiKey) {
+
     alert("API Key দেওয়া নেই। উপরে 'API Key' বাটনে ক্লিক করে কি সেট করুন।");
+
     return;
   }
 
-  requestInFlight = true;
-  input.value = "";
-  sendBtn.disabled = true;
-  sendBtn.classList.add("opacity-60", "cursor-not-allowed");
 
-  chatHistories[activeCharacter.id].push({ sender: "user", text });
+  requestInFlight = true;
+
+  input.value = "";
+
+  sendBtn.disabled = true;
+
+  sendBtn.classList.add(
+    "opacity-60",
+    "cursor-not-allowed"
+  );
+
+
+  chatHistories[activeCharacter.id].push({
+    sender: "user",
+    text
+  });
+
   renderChatMessages();
 
-  const typing = document.getElementById("typingIndicator");
+
+  const typing =
+    document.getElementById("typingIndicator");
+
   typing.classList.remove("hidden");
 
+  typing.classList.add("flex");
+
+
   try {
+
     const formattedMessages = [
-      { role: "system", content: CHANDONA_SYSTEM_PROMPT },
+
+      {
+        role: "system",
+        content: CHANDONA_SYSTEM_PROMPT
+      },
+
       ...chatHistories[activeCharacter.id].map(m => ({
-        role: m.sender === "user" ? "user" : "assistant",
+        role: m.sender === "user"
+          ? "user"
+          : "assistant",
         content: m.text
       }))
+
     ];
 
-    const response = await fetch(API_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${openRouterApiKey}`,
-        "HTTP-Referer": window.location.origin,
-        "X-Title": "SpicyChat Web App"
-      },
-      body: JSON.stringify({
-        model: AI_MODEL,
-        messages: formattedMessages,
-        temperature: 0.85
-      })
-    });
+
+    const response = await fetch(
+      API_ENDPOINT,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${openRouterApiKey}`,
+          "HTTP-Referer": window.location.origin,
+          "X-Title": "SpicyChat Web App"
+        },
+
+        body: JSON.stringify({
+          model: AI_MODEL,
+          messages: formattedMessages,
+          temperature: 0.85
+        })
+      }
+    );
+
 
     let data = {};
-    try { data = await response.json(); } catch (_) {}
+
+    try {
+      data = await response.json();
+    } catch (_) {}
+
 
     if (!response.ok) {
-      throw new Error(data.error?.message || `API request failed (${response.status})`);
+
+      throw new Error(
+        data.error?.message ||
+        `API request failed (${response.status})`
+      );
+
     }
 
-    const reply = data.choices && data.choices[0]?.message?.content ? data.choices[0].message.content.trim() : "";
-    if (!reply) throw new Error("API returned an empty reply.");
 
-    chatHistories[activeCharacter.id].push({ sender: "ai", text: reply });
-  } catch (error) {
-    console.error(error);
+    const reply =
+      data.choices &&
+      data.choices[0]?.message?.content
+        ? data.choices[0].message.content.trim()
+        : "";
+
+
+    if (!reply) {
+      throw new Error("API returned an empty reply.");
+    }
+
+
     chatHistories[activeCharacter.id].push({
       sender: "ai",
-      text: "দুঃখিত সোনা, এই মুহূর্তে সার্ভারে একটু সমস্যা হচ্ছে বা API Key তে ভুল আছে। আবার চেষ্টা করো।"
+      text: reply
     });
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    chatHistories[activeCharacter.id].push({
+      sender: "ai",
+      text:
+        "দুঃখিত, এই মুহূর্তে সার্ভারে একটু সমস্যা হচ্ছে বা API Key তে ভুল আছে। আবার চেষ্টা করো।"
+    });
+
   } finally {
+
     typing.classList.add("hidden");
+    typing.classList.remove("flex");
+
     requestInFlight = false;
+
     sendBtn.disabled = false;
-    sendBtn.classList.remove("opacity-60", "cursor-not-allowed");
+
+    sendBtn.classList.remove(
+      "opacity-60",
+      "cursor-not-allowed"
+    );
+
     renderChatMessages();
+
     input.focus();
   }
 }
 
+
+/* TTS CLEANER */
+
 function cleanForSpeech(text) {
-  return text
+
+  return String(text)
+
+    /* bracket actions */
+    .replace(/\[[^\]]*\]/g, " ")
+
+    /* parenthesis actions */
+    .replace(/\([^)]*\)/g, " ")
+
+    /* asterisk actions */
+    .replace(/\*[^*]*\*/g, " ")
+
+    /* Bengali action / sound descriptions */
+    .replace(
+      /\b(?:মুচকি হাসে|মুচকি হেসে|মুচকি হাসি|হালকা হাসে|হালকা হেসে|হেসে|হাসতে হাসতে|হাসি|খিলখিল করে|হাসির শব্দ|হালকা খোচা দিয়ে|খোচা দিয়ে)\b/gi,
+      " "
+    )
+
+    /* English action descriptions */
+    .replace(
+      /\b(?:laughs?|laughing|smiles?|smiling|giggles?|chuckles?|grins?|whispers?)\b/gi,
+      " "
+    )
+
+    /* Emoji */
     .replace(/[\u{1F300}-\u{1FAFF}]/gu, "")
     .replace(/[\u{1F1E6}-\u{1F1FF}]/gu, "")
     .replace(/[\u{2600}-\u{27BF}]/gu, "")
     .replace(/[\u{FE0E}\u{FE0F}\u{200D}]/gu, "")
+
     .replace(/\s{2,}/g, " ")
     .trim();
 }
 
+
+/* BANGLA FEMALE VOICE */
+
 function chooseBanglaVoice() {
+
   if (!("speechSynthesis" in window)) return null;
+
   const voices = speechSynthesis.getVoices();
-  const bn = voices.filter(v => /^bn(?:-|_)/i.test(v.lang) || /bangla|bengali/i.test(v.name));
-  const femaleHints = /female|woman|lekha|tithi|kalpana|google/i;
-  return bn.find(v => femaleHints.test(v.name)) || bn[0] || voices.find(v => femaleHints.test(v.name)) || null;
+
+
+  const banglaVoices = voices.filter(v =>
+    /^bn(?:-|_)/i.test(v.lang) ||
+    /bangla|bengali/i.test(v.name)
+  );
+
+
+  const femalePattern =
+    /female|woman|girl|lekha|tithi|kalpana|google/i;
+
+
+  const banglaFemale =
+    banglaVoices.find(v =>
+      femalePattern.test(v.name)
+    );
+
+
+  if (banglaFemale) {
+    return banglaFemale;
+  }
+
+
+  if (banglaVoices.length) {
+    return banglaVoices[0];
+  }
+
+
+  const femaleVoice =
+    voices.find(v =>
+      femalePattern.test(v.name)
+    );
+
+
+  return femaleVoice || null;
 }
 
+
+/* TTS */
+
 function speakText(text, btn) {
+
   if (!("speechSynthesis" in window)) return;
+
+
   if (speechSynthesis.speaking) {
+
     speechSynthesis.cancel();
+
     document.querySelectorAll("[data-tts-button]").forEach(b => {
-      b.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+
+      b.innerHTML =
+        '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+
+      b.dataset.active = "0";
+
     });
+
+
     if (btn.dataset.active === "1") {
+
       btn.dataset.active = "0";
+
       return;
     }
   }
 
-  const cleanText = cleanForSpeech(text);
+
+  const cleanText =
+    cleanForSpeech(text);
+
+
   if (!cleanText) return;
 
-  const utterance = new SpeechSynthesisUtterance(cleanText);
-  const voice = chooseBanglaVoice();
+
+  const utterance =
+    new SpeechSynthesisUtterance(cleanText);
+
+
+  const voice =
+    chooseBanglaVoice();
+
+
   if (voice) {
+
     utterance.voice = voice;
+
     utterance.lang = voice.lang;
+
   } else {
+
     utterance.lang = "bn-BD";
   }
 
+
   utterance.rate = 0.90;
+
   utterance.pitch = 1.15;
+
+
   btn.dataset.ttsButton = "1";
+
   btn.dataset.active = "1";
-  btn.innerHTML = '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
+
+
+  btn.innerHTML =
+    '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
+
 
   const reset = () => {
+
     btn.dataset.active = "0";
-    btn.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+
+    btn.innerHTML =
+      '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+
   };
+
+
   utterance.onend = reset;
+
   utterance.onerror = reset;
+
+
   speechSynthesis.speak(utterance);
 }
 
+
 if ("speechSynthesis" in window) {
-  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+
+  speechSynthesis.onvoiceschanged = () =>
+    speechSynthesis.getVoices();
+
 }
+
+
+/* HELPERS */
 
 function escapeHtml(str) {
-  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
+
 renderCharacters();
+
 </script>
+
 </body>
 </html>
