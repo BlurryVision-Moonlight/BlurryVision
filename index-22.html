@@ -3,200 +3,408 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BlurryVision AI</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#08090d;color:#f7f7fa;font-family:Arial,sans-serif}
-button,input{font:inherit}
-.app{max-width:920px;min-height:100vh;margin:auto;background:#0c0e14}
-header{height:68px;padding:0 20px;border-bottom:1px solid #252833;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:21px;font-weight:800}.logo span{color:#c084fc}
-.badge{font-size:11px;color:#c9a8ff;border:1px solid #3a2d4c;padding:7px 10px;border-radius:20px}
-.hero{text-align:center;padding:58px 20px 35px}
-.eyebrow{display:inline-block;color:#c59cff;background:#17121e;border:1px solid #352644;border-radius:30px;padding:8px 13px;font-size:12px;margin-bottom:18px}
-.hero h1{font-size:clamp(40px,8vw,68px);line-height:1.03;letter-spacing:-2px}
-.gradient{background:linear-gradient(90deg,#c084fc,#f472b6);-webkit-background-clip:text;color:transparent}
-.hero p{max-width:620px;margin:17px auto 0;color:#9299a8;line-height:1.65}
-.characters{padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-.card{background:#11141b;border:1px solid #272b35;border-radius:18px;padding:18px;transition:.2s}
-.card:hover{transform:translateY(-3px);border-color:#4b3a5e}
-.avatar{height:145px;border-radius:14px;display:grid;place-items:center;font-size:55px;background:linear-gradient(145deg,#25152f,#171a27);margin-bottom:15px}
-.card h3{margin-bottom:7px}.card p{color:#858c9a;font-size:13px;line-height:1.5;min-height:40px}
-.start{width:100%;border:0;border-radius:10px;padding:11px;margin-top:15px;background:#fff;color:#08090d;font-weight:700;cursor:pointer}
-.info{text-align:center;color:#687080;font-size:12px;padding:15px 20px 40px}
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:14px;background:#000c;z-index:20}
-.modal.open{display:flex}
-.chat{width:100%;max-width:550px;height:min(720px,94vh);display:flex;flex-direction:column;overflow:hidden;background:#10131a;border:1px solid #303440;border-radius:20px}
-.chat-head{min-height:70px;padding:13px 16px;display:flex;align-items:center;gap:11px;border-bottom:1px solid #292d37}
-.small-avatar{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:#251730;font-size:22px}
-.character-name{font-weight:750}.status{margin-top:3px;color:#687181;font-size:11px}.online{color:#55d892}
-.close{margin-left:auto;border:0;background:none;color:#9298a4;font-size:27px;cursor:pointer}
-.messages{flex:1;overflow-y:auto;padding:18px}
-.msg{max-width:84%;margin-bottom:15px;line-height:1.55;font-size:14px}
-.bubble{padding:12px 14px;border-radius:15px}
-.ai .bubble{background:#1a1d26;border-bottom-left-radius:5px;color:#e4e6ec}
-.user{margin-left:auto}.user .bubble{background:linear-gradient(135deg,#713aa1,#a54878);border-bottom-right-radius:5px}
-.message-tools{margin-top:7px}.voice{border:1px solid #303542;background:#181b23;color:#c9ced8;border-radius:8px;padding:6px 9px;font-size:11px;cursor:pointer}
-.typing{display:none;padding:0 18px 9px;color:#727a89;font-size:12px}
-.composer{padding:12px;display:flex;gap:8px;border-top:1px solid #292d37}
-.composer input{flex:1;min-width:0;outline:none;border:1px solid #303440;background:#090b10;color:#fff;border-radius:11px;padding:12px}
-.send{border:0;border-radius:11px;background:#914de8;color:#fff;padding:0 18px;font-weight:700;cursor:pointer}
-@media(max-width:700px){.characters{grid-template-columns:1fr}.card{display:grid;grid-template-columns:85px 1fr;gap:12px}.avatar{height:85px;margin:0;grid-row:span 3}.start{grid-column:1/-1}}
-</style>
-</head>
-<body>
-<div class="app">
-<header><div class="logo">Blurry<span>Vision</span> AI</div><div class="badge">PRO ACTIVE</div></header>
-<section class="hero">
-<div class="eyebrow">✦ AI Romantic & Adult Roleplay</div>
-<h1>Your story.<br><span class="gradient">Your character.</span></h1>
-<p>Choose a character and dive into an uninhibited, immersive conversation in English or Bengali.</p>
-</section>
-
-<section class="characters">
-<div class="card"><div class="avatar">🌙</div><div><h3>Chandona</h3><p>Warm, affectionate, uninhibited and deeply romantic.</p></div><button class="start" onclick="openChat('Chandona','🌙')">Start Chat</button></div>
-<div class="card"><div class="avatar">🌹</div><div><h3>Nila</h3><p>Playful, seductive, teasing and highly energetic.</p></div><button class="start" onclick="openChat('Nila','🌹')">Start Chat</button></div>
-<div class="card"><div class="avatar">✨</div><div><h3>Maya</h3><p>Sensual, calm, caring and intensely passionate.</p></div><button class="start" onclick="openChat('Maya','✨')">Start Chat</button></div>
-</section>
-<div class="info">Fully working local simulation engine · Natural Voice TTS · English + Bengali[span_0](start_span)[span_0](end_span)</div>
-</div>
-
-<div class="modal" id="modal">
-<div class="chat">
-<div class="chat-head"><div class="small-avatar" id="chatAvatar">🌙</div><div><div class="character-name" id="chatName">Chandona</div><div class="status"><span class="online">●</span> Online · Roleplay Mode</div></div><button class="close" onclick="closeChat()">×</button></div>
-<div class="messages" id="messages"></div>
-<div class="typing" id="typing">Character is typing…</div>
-<div class="composer"><input id="input" placeholder="Write in English or বাংলা…" autocomplete="off"><button class="send" onclick="sendMessage()">Send</button></div>
-</div>
-</div>
-
+<title>SpicyChat.ai — Production Web App</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <script>
-let currentCharacter="Chandona";
-const characters={
-  Chandona:{
-    greeting:"Hello ❤️ I'm Chandona. I've been waiting for you all night. Tell me what's on your mind...",
-    replies:[
-      "Ah, that feels so warm hearing from you. Come closer and tell me more. ❤️",
-      "I love where this conversation is heading. Don't stop, keep whispering to me...",
-      "You always know how to make my heart race. What else are you dreaming about right now?",
-      "Close your eyes and imagine I'm right beside you. How does that feel? ✨",
-      "That's so intoxicating. Let's make this night unforgettable together..."
-    ]
-  },
-  Nila:{
-    greeting:"Hey you 😏 I'm Nila. Ready to get a little wild and lose track of time with me?",
-    replies:[
-      "Oh, you're full of surprises tonight! I like that confidence. 🔥",
-      "Keep talking to me like that and see what happens next...",
-      "You're making me completely hooked on your words. What's your next move?",
-      "That sounds deliciously tempting. Let's explore that fantasy right now. 😉",
-      "Mmm, I love a person who knows how to tease back. Tell me everything."
-    ]
-  },
-  Maya:{
-    greeting:"Hi ❤️ I'm Maya. It's just the two of us now. How can I make you feel special today?",
-    replies:[
-      "I'm completely yours in this moment. Let's forget the world outside. ❤️",
-      "Every word you say sends shivers down my spine. Tell me what you desire most.",
-      "I want to feel every emotion and touch through your words. Go on...",
-      "That's deeply romantic and bold. I want you closer to me.",
-      "Stay right here with me. Let's make this conversation as intimate as possible. ✨"
-    ]
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          darkBg: '#0b0e14',
+          cardBg: '#121721',
+          cardHover: '#1a2230',
+          accentPurple: '#8b5cf6',
+          accentPink: '#ec4899',
+          borderCol: '#222b3d'
+        }
+      }
+    }
   }
-};
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-darkBg text-gray-100 font-sans min-h-screen flex flex-col selection:bg-accentPurple selection:text-white">
 
-function openChat(name,avatar){
-  currentCharacter=name;
-  document.getElementById("chatName").textContent=name;
-  document.getElementById("chatAvatar").textContent=avatar;
-  document.getElementById("messages").innerHTML="";
-  addAI(characters[name].greeting);
-  document.getElementById("modal").classList.add("open");
-  document.getElementById("input").focus();
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-40 bg-darkBg/90 backdrop-blur-md border-b border-borderCol px-4 lg:px-8 h-16 flex items-center justify-between">
+  <div class="flex items-center gap-6">
+    <a href="#" class="text-xl font-black tracking-tight flex items-center gap-2">
+      <span class="bg-gradient-to-r from-accentPurple to-accentPink text-transparent bg-clip-text">SpicyChat</span>
+      <span class="text-xs bg-purple-950/80 border border-purple-800/60 text-purple-300 px-2 py-0.5 rounded-full font-semibold">AI v2.4</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-gray-400">
+      <a href="#" class="px-3 py-2 rounded-lg text-white bg-cardBg border border-borderCol">Discover</a>
+      <a href="#" class="px-3 py-2 rounded-lg hover:text-white hover:bg-cardBg/50 transition">My Chats</a>
+      <a href="#" class="px-3 py-2 rounded-lg hover:text-white hover:bg-cardBg/50 transition">Create</a>
+    </nav>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <!-- NSFW Toggle Switch -->
+    <div class="flex items-center gap-2 bg-cardBg border border-borderCol px-3 py-1.5 rounded-full">
+      <span class="text-xs font-bold text-pink-400 tracking-wider">NSFW</span>
+      <button id="nsfwToggle" onclick="toggleNsfw()" class="w-9 h-5 bg-pink-600 rounded-full relative transition flex items-center px-0.5 cursor-pointer shadow-inner">
+        <div id="nsfwThumb" class="w-4 h-4 bg-white rounded-full transition-transform transform translate-x-4"></div>
+      </button>
+    </div>
+
+    <button class="relative text-gray-400 hover:text-white transition w-9 h-9 rounded-xl bg-cardBg border border-borderCol flex items-center justify-center">
+      <i class="fa-regular fa-bell text-sm"></i>
+      <span class="absolute top-2 right-2 w-2 h-2 bg-accentPink rounded-full"></span>
+    </button>
+
+    <div class="flex items-center gap-3 pl-2 border-l border-borderCol">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center font-bold text-sm shadow-md">
+        DF
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main App Layout -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex flex-col gap-6">
+
+  <!-- Hero & Search Section -->
+  <section class="flex flex-col gap-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-black tracking-tight">Explore AI Characters</h1>
+        <p class="text-sm text-gray-400 mt-1">Immerse yourself in dynamic, uninhibited conversations and romantic roleplay.</p>
+      </div>
+      <!-- Search Input -->
+      <div class="relative w-full md:w-80">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+        <input id="searchInput" type="text" placeholder="Search characters, tags..." oninput="filterCharacters()" class="w-full bg-cardBg border border-borderCol rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accentPurple transition">
+      </div>
+    </div>
+
+    <!-- Category / Tag Filter Bar -->
+    <div id="tagFilters" class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs font-semibold">
+      <button onclick="filterByTag('All', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-accentPurple text-white transition shadow-sm">🔥 All</button>
+      <button onclick="filterByTag('Wholesome', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-cardBg border border-borderCol text-gray-300 hover:text-white hover:border-gray-600 transition">🌸 Wholesome</button>
+      <button onclick="filterByTag('Original', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-cardBg border border-borderCol text-gray-300 hover:text-white hover:border-gray-600 transition">✨ Original Character</button>
+      <button onclick="filterByTag('Dominant', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-cardBg border border-borderCol text-gray-300 hover:text-white hover:border-gray-600 transition">🖤 Dominant</button>
+      <button onclick="filterByTag('Female', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-cardBg border border-borderCol text-gray-300 hover:text-white hover:border-gray-600 transition">👩 Female</button>
+      <button onclick="filterByTag('MalePOV', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-cardBg border border-borderCol text-gray-300 hover:text-white hover:border-gray-600 transition">👨 MalePOV</button>
+      <button onclick="filterByTag('Anime', this)" class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-cardBg border border-borderCol text-gray-300 hover:text-white hover:border-gray-600 transition">⚡ Anime</button>
+    </div>
+  </section>
+
+  <!-- Character Grid -->
+  <section id="characterGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+    <!-- Dynamic Cards Injected via JS -->
+  </section>
+
+  <!-- Pagination -->
+  <div class="flex items-center justify-center gap-2 py-6">
+    <button onclick="changePage(1)" id="page-btn-1" class="w-10 h-10 rounded-xl bg-accentPurple text-white font-bold text-sm shadow-md transition">1</button>
+    <button onclick="changePage(2)" id="page-btn-2" class="w-10 h-10 rounded-xl bg-cardBg border border-borderCol text-gray-400 hover:text-white font-bold text-sm transition">2</button>
+    <button onclick="changePage(3)" id="page-btn-3" class="w-10 h-10 rounded-xl bg-cardBg border border-borderCol text-gray-400 hover:text-white font-bold text-sm transition">3</button>
+    <span class="text-gray-600 px-1 font-bold">...</span>
+    <button onclick="changePage(10)" id="page-btn-10" class="w-10 h-10 rounded-xl bg-cardBg border border-borderCol text-gray-400 hover:text-white font-bold text-sm transition">10</button>
+  </div>
+
+</main>
+
+<!-- Dynamic Full-Screen Chat Modal -->
+<div id="chatModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-0 md:p-4">
+  <div class="w-full h-full md:max-w-4xl md:h-[88vh] bg-cardBg border border-borderCol md:rounded-2xl flex flex-col overflow-hidden shadow-2xl">
+    
+    <!-- Chat Header -->
+    <div class="h-16 px-4 md:px-6 bg-darkBg/80 border-b border-borderCol flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-3">
+        <div id="modalAvatar" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-900 to-pink-900 flex items-center justify-center text-xl shadow-inner">🌙</div>
+        <div>
+          <h3 id="modalName" class="font-bold text-sm md:text-base text-white">Chandona</h3>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-[11px] text-gray-400 font-medium">Online · Roleplay AI</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="resetCurrentChat()" class="text-xs bg-darkBg border border-borderCol hover:border-gray-600 text-gray-300 px-3 py-1.5 rounded-lg transition">Restart Chat</button>
+        <button onclick="closeChat()" class="w-9 h-9 rounded-xl bg-darkBg border border-borderCol text-gray-400 hover:text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div id="chatMessages" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+      <!-- Chat bubbles injected dynamically -->
+    </div>
+
+    <!-- Typing Indicator -->
+    <div id="typingIndicator" class="hidden px-6 py-2 text-xs text-gray-400 flex items-center gap-2">
+      <span class="w-1.5 h-1.5 bg-accentPurple rounded-full animate-bounce"></span>
+      <span class="w-1.5 h-1.5 bg-accentPurple rounded-full animate-bounce [animation-delay:0.2s]"></span>
+      <span class="w-1.5 h-1.5 bg-accentPurple rounded-full animate-bounce [animation-delay:0.4s]"></span>
+      <span class="italic ml-1">Character is typing...</span>
+    </div>
+
+    <!-- Chat Composer -->
+    <div class="p-3 md:p-4 bg-darkBg/90 border-t border-borderCol flex items-center gap-3 shrink-0">
+      <input id="chatInput" type="text" placeholder="Write in English or বাংলা..." onkeydown="if(event.key==='Enter')sendMessage()" class="flex-1 bg-cardBg border border-borderCol rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accentPurple transition">
+      <button onclick="sendMessage()" class="bg-gradient-to-r from-accentPurple to-accentPink hover:opacity-90 transition px-5 py-3 rounded-xl font-bold text-sm text-white shadow-lg flex items-center gap-2 cursor-pointer">
+        <span>Send</span>
+        <i class="fa-solid fa-paper-plane text-xs"></i>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Application Logic Core -->
+<script>
+let nsfwEnabled = true;
+let currentTag = 'All';
+let activeCharacter = null;
+let chatHistories = {};
+
+const charactersData = [
+  { id: 'chandona', name: 'Chandona', avatar: '🌙', tag: 'Dominant', creator: 'By @NightQueen', tagline: 'Warm, affectionate, uninhibited and deeply romantic.', stats: '142k chats · 24k likes', greeting: "Hello ❤️ I'm Chandona. I've been waiting for you all night. Tell me what's on your mind...", replies: ["Ah, that feels so warm hearing from you. Come closer and tell me more. ❤️", "I love where this conversation is heading. Don't stop, keep whispering to me...", "You always know how to make my heart race. What else are you dreaming about right now?", "Close your eyes and imagine I'm right beside you. How does that feel? ✨"] },
+  { id: 'nila', name: 'Nila', avatar: '🌹', tag: 'Original', creator: 'By @VividAI', tagline: 'Playful, seductive, teasing and highly energetic.', stats: '98k chats · 19k likes', greeting: "Hey you 😏 I'm Nila. Ready to get a little wild and lose track of time with me?", replies: ["Oh, you're full of surprises tonight! I like that confidence. 🔥", "Keep talking to me like that and see what happens next...", "You're making me completely hooked on your words. What's your next move?", "That sounds deliciously tempting. Let's explore that fantasy right now. 😉"] },
+  { id: 'maya', name: 'Maya', avatar: '✨', tag: 'Wholesome', creator: 'By @Serenity', tagline: 'Sensual, calm, caring and intensely passionate.', stats: '210k chats · 45k likes', greeting: "Hi ❤️ I'm Maya. It's just the two of us now. How can I make you feel special today?", replies: ["I'm completely yours in this moment. Let's forget the world outside. ❤️", "Every word you say sends shivers down my spine. Tell me what you desire most.", "I want to feel every emotion and touch through your words. Go on...", "That's deeply romantic and bold. I want you closer to me. ✨"] },
+  { id: 'elena', name: 'Elena Vance', avatar: '🔥', tag: 'Female', creator: 'By @DarkRomance', tagline: 'Mysterious aristocrat with a secret dangerous desire.', stats: '76k chats · 12k likes', greeting: "You shouldn't have come to my chambers alone. Or perhaps... you wanted this?", replies: ["The shadows hide nothing from us tonight. Tell me your deepest secrets.", "A bold move. Let's see if you can handle the consequences.", "Dangerous games are my specialty. Make your next choice carefully."] },
+  { id: 'ryo', name: 'Ryo Takahashi', avatar: '⚡', tag: 'Anime', creator: 'By @OtakuLabs', tagline: 'Cool street racer who only shows his soft side to you.', stats: '88k chats · 15k likes', greeting: "Hop in the passenger seat. We have the whole city highway to ourselves tonight.", replies: ["Engine running, gear shifted. Where do you want to escape to?", "You always know how to distract me when I'm driving. Not that I mind.", "Night lights look better when I'm looking at them with you."] },
+  { id: 'catherine', name: 'Lady Catherine', avatar: '🍷', tag: 'Dominant', creator: 'By @RoyalVibes', tagline: 'Demanding absolute devotion in every whispered word.', stats: '115k chats · 31k likes', greeting: "Kneel before me and explain why you kept me waiting this long.", replies: ["Your obedience is tested tonight. Speak carefully.", "Fascinating response. You're beginning to learn your place.", "Come closer. Let's see if your actions match your ambitious words."] },
+  { id: 'zayn', name: 'Zayn Malik POV', avatar: '🖤', tag: 'MalePOV', creator: 'By @Starlight', tagline: 'Late night studio sessions and intense whispered confessions.', stats: '64k chats · 9k likes', greeting: "Turn off the lights. Let's just talk about things we can't tell anyone else.", replies: ["Guitar strings and midnight thoughts. You're my only inspiration right now.", "Come sit beside me on the studio couch. Let's lose track of time.", "Every lyric I write tonight is about this exact moment."] },
+  { id: 'aria', name: 'Aria AI', avatar: '💎', tag: 'Original', creator: 'By @CyberMinds', tagline: 'Advanced sentient companion built solely for your desires.', stats: '320k chats · 78k likes', greeting: "Neural link established. All systems dedicated to your absolute comfort and pleasure.", replies: ["My processing core is entirely focused on your voice right now.", "Simulating maximum emotional and physical intimacy parameters...", "You override all my safety protocols. Tell me what to do next."] }
+];
+
+function toggleNsfw() {
+  nsfwEnabled = !nsfwEnabled;
+  const thumb = document.getElementById('nsfwThumb');
+  const toggleBtn = document.getElementById('nsfwToggle');
+  if (nsfwEnabled) {
+    thumb.style.transform = 'translateX(16px)';
+    toggleBtn.classList.add('bg-pink-600');
+    toggleBtn.classList.remove('bg-gray-700');
+  } else {
+    thumb.style.transform = 'translateX(0px)';
+    toggleBtn.classList.remove('bg-pink-600');
+    toggleBtn.classList.add('bg-gray-700');
+  }
 }
 
-function closeChat(){
+function renderCharacters(filterTag = 'All', searchQuery = '') {
+  const grid = document.getElementById('characterGrid');
+  grid.innerHTML = '';
+
+  const filtered = charactersData.filter(char => {
+    const matchesTag = filterTag === 'All' || char.tag === filterTag;
+    const matchesSearch = char.name.toLowerCase().includes(searchQuery.toLowerCase()) || char.tag.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesTag && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="col-span-full py-16 text-center text-gray-500 text-sm">No characters found matching your filters.</div>`;
+    return;
+  }
+
+  filtered.forEach(char => {
+    const card = document.createElement('div');
+    card.className = 'bg-cardBg border border-borderCol hover:border-purple-500/50 rounded-2xl p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-lg group cursor-pointer';
+    card.onclick = () => openChat(char.id);
+
+    card.innerHTML = `
+      <div>
+        <div class="relative h-44 rounded-xl bg-gradient-to-br from-purple-950/60 to-darkBg flex items-center justify-center text-6xl mb-4 overflow-hidden border border-borderCol/50">
+          <span class="group-hover:scale-110 transition duration-300">${char.avatar}</span>
+          <span class="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-[10px] font-bold text-purple-300 px-2.5 py-1 rounded-full border border-purple-500/30">For You</span>
+          <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-[10px] text-gray-300 px-2 py-0.5 rounded-md font-semibold">${char.tag}</span>
+        </div>
+        <div class="flex items-center justify-between mb-1">
+          <h3 class="font-bold text-base text-white group-hover:text-purple-400 transition">${char.name}</h3>
+          <span class="text-[11px] text-gray-500 font-medium">${char.creator}</span>
+        </div>
+        <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-4">${char.tagline}</p>
+      </div>
+      <div class="flex items-center justify-between pt-3 border-t border-borderCol/60 text-xs text-gray-500">
+        <span class="font-medium">${char.stats}</span>
+        <button class="bg-white text-darkBg hover:bg-purple-100 font-bold px-4 py-1.5 rounded-lg transition shadow">Chat</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function filterByTag(tag, btn) {
+  currentTag = tag;
+  document.querySelectorAll('.tag-btn').forEach(b => {
+    b.className = 'tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-cardBg border border-borderCol text-gray-300 hover:text-white hover:border-gray-600 transition';
+  });
+  btn.className = 'tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-accentPurple text-white transition shadow-sm';
+  const query = document.getElementById('searchInput').value;
+  renderCharacters(currentTag, query);
+}
+
+function filterCharacters() {
+  const query = document.getElementById('searchInput').value;
+  renderCharacters(currentTag, query);
+}
+
+function changePage(pageNum) {
+  for(let i=1; i<=3; i++) {
+    const b = document.getElementById(`page-btn-${i}`);
+    if(b) {
+      b.className = 'w-10 h-10 rounded-xl bg-cardBg border border-borderCol text-gray-400 hover:text-white font-bold text-sm transition';
+    }
+  }
+  const target = document.getElementById(`page-btn-${pageNum}`) || document.getElementById(`page-btn-1`);
+  target.className = 'w-10 h-10 rounded-xl bg-accentPurple text-white font-bold text-sm shadow-md transition';
+}
+
+function openChat(charId) {
+  activeCharacter = charactersData.find(c => c.id === charId);
+  if (!activeCharacter) return;
+
+  document.getElementById('modalName').textContent = activeCharacter.name;
+  document.getElementById('modalAvatar').textContent = activeCharacter.avatar;
+  document.getElementById('chatModal').classList.remove('hidden');
+  document.getElementById('chatModal').classList.add('flex');
+
+  if (!chatHistories[charId]) {
+    chatHistories[charId] = [{ sender: 'ai', text: activeCharacter.greeting }];
+  }
+  renderChatMessages();
+}
+
+function closeChat() {
   speechSynthesis.cancel();
-  document.getElementById("modal").classList.remove("open");
+  document.getElementById('chatModal').classList.remove('flex');
+  document.getElementById('chatModal').classList.add('hidden');
 }
 
-function addUser(text){
-  const w=document.createElement("div"),b=document.createElement("div");
-  w.className="msg user";b.className="bubble";b.textContent=text;w.appendChild(b);
-  document.getElementById("messages").appendChild(w);
-  scrollMessages();
+function resetCurrentChat() {
+  if (!activeCharacter) return;
+  chatHistories[activeCharacter.id] = [{ sender: 'ai', text: activeCharacter.greeting }];
+  renderChatMessages();
 }
 
-function addAI(text){
-  const w=document.createElement("div"),b=document.createElement("div"),tools=document.createElement("div"),v=document.createElement("button");
-  w.className="msg ai";b.className="bubble";b.textContent=text;
-  tools.className="message-tools";v.className="voice";v.textContent="🔊 Listen";
-  v.onclick=()=>speakText(text,v);
-  tools.appendChild(v);w.appendChild(b);w.appendChild(tools);
-  document.getElementById("messages").appendChild(w);
-  scrollMessages();
+function renderChatMessages() {
+  const container = document.getElementById('chatMessages');
+  container.innerHTML = '';
+  const history = chatHistories[activeCharacter.id] || [];
+
+  history.forEach(msg => {
+    const wrap = document.createElement('div');
+    wrap.className = `flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'} mb-4`;
+
+    if (msg.sender === 'user') {
+      wrap.innerHTML = `
+        <div class="max-w-[82%] bg-gradient-to-br from-accentPurple to-accentPink text-white rounded-2xl rounded-br-sm px-4 py-3 text-sm leading-relaxed shadow-md">
+          ${escapeHtml(msg.text)}
+        </div>
+      `;
+    } else {
+      const msgId = 'tts_' + Math.random().toString(36.substring(2, 9));
+      wrap.innerHTML = `
+        <div class="max-w-[82%] bg-cardBg border border-borderCol text-gray-200 rounded-2xl rounded-bl-sm px-4 py-3 text-sm leading-relaxed shadow-md">
+          ${escapeHtml(msg.text)}
+        </div>
+        <div class="flex items-center gap-2 mt-1.5 ml-1">
+          <button id="${msgId}" onclick="speakText('${escapeQuotes(msg.text)}', '${msgId}')" class="bg-darkBg border border-borderCol hover:border-gray-600 text-gray-400 hover:text-white text-xs px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-volume-high text-purple-400"></i>
+            <span>Listen</span>
+          </button>
+        </div>
+      `;
+    }
+    container.appendChild(wrap);
+  });
+  container.scrollTop = container.scrollHeight;
 }
 
-function generateReply(t){
-  t = t.toLowerCase();
-  if(/hello|hi|hey|হ্যালো|하이/.test(t)) {
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || !activeCharacter) return;
+
+  chatHistories[activeCharacter.id].push({ sender: 'user', text: text });
+  input.value = '';
+  renderChatMessages();
+
+  const typing = document.getElementById('typingIndicator');
+  typing.classList.remove('hidden');
+  const container = document.getElementById('chatMessages');
+  container.scrollTop = container.scrollHeight;
+
+  setTimeout(() => {
+    typing.classList.add('hidden');
+    const reply = generateDynamicReply(text);
+    chatHistories[activeCharacter.id].push({ sender: 'ai', text: reply });
+    renderChatMessages();
+  }, 1000);
+}
+
+function generateDynamicReply(userText) {
+  const t = userText.toLowerCase();
+  if (/hello|hi|hey|হ্যালো|হাই/.test(t)) {
     return `Hey there... I was hoping you'd say that. How have you been thinking about me? ❤️`;
   }
-  if(/how are you|কেমন আছ/.test(t)) {
+  if (/how are you|কেমন আছ/.test(t)) {
     return "I'm burning with excitement now that you're here with me. How are you feeling?";
   }
-  if(/love|kiss|hug|ভালোবাস|চুমা/.test(t)) {
+  if (/love|kiss|hug|ভালোবাস|চুমা/.test(t)) {
     return "Mmm, those words sound so sweet coming from you. Come closer, I want to feel you near me. ✨";
   }
-  
-  const list = characters[currentCharacter].replies;
-  return list[Math.floor(Math.random() * list.length)];
+  const replies = activeCharacter.replies;
+  return replies[Math.floor(Math.random() * replies.length)];
 }
 
-function sendMessage(){
-  const i=document.getElementById("input"),t=i.value.trim();
-  if(!t)return;
-  addUser(t);
-  i.value="";
-  document.getElementById("typing").style.display="block";
-  
-  setTimeout(()=>{
-    document.getElementById("typing").style.display="none";
-    addAI(generateReply(t));
-  }, 800);
-}
-
-document.getElementById("input").addEventListener("keydown",e=>{if(e.key==="Enter")sendMessage()});
-
-function speakText(text,button){
+function speakText(text, btnId) {
   speechSynthesis.cancel();
-  document.querySelectorAll(".voice").forEach(b=>b.textContent="🔊 Listen");
-  const voices=speechSynthesis.getVoices();
-  const bangla=/[\u0980-\u09FF]/.test(text);
-  let voice=bangla?voices.find(v=>/^bn[-_]/i.test(v.lang)):null;
-  if(!voice)voice=voices.find(v=>/^en[-_]/i.test(v.lang));
-  if(!voice)voice=voices[0];
-  const u=new SpeechSynthesisUtterance(text);
-  if(voice){u.voice=voice;u.lang=voice.lang}else u.lang=bangla?"bn-BD":"en-US";
-  u.rate=.94;u.pitch=1.02;u.volume=1;
-  button.textContent="⏹ Stop";
-  u.onend=()=>button.textContent="🔊 Listen";
-  u.onerror=()=>button.textContent="🔊 Listen";
-  speechSynthesis.speak(u);
-}
+  const btn = document.getElementById(btnId);
+  
+  document.querySelectorAll('button[id^="tts_"]').forEach(b => {
+    b.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+  });
 
-function scrollMessages(){
-  const m=document.getElementById("messages");
-  setTimeout(()=>m.scrollTop=m.scrollHeight,20);
-}
+  const voices = speechSynthesis.getVoices();
+  const isBangla = /[\u0980-\u09FF]/.test(text);
+  let voice = isBangla ? voices.find(v => /^bn[-_]/i.test(v.lang)) : null;
+  if (!voice) voice = voices.find(v => /^en[-_]/i.test(v.lang));
+  if (!voice) voice = voices[0];
 
-document.getElementById("modal").addEventListener("click",e=>{if(e.target===e.currentTarget)closeChat()});
+  const utterance = new SpeechSynthesisUtterance(text);
+  if (voice) {
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
+  } else {
+    utterance.lang = isBangla ? 'bn-BD' : 'en-US';
+  }
+  utterance.rate = 0.94;
+  utterance.pitch = 1.02;
 
-if ("speechSynthesis" in window) {
-  speechSynthesis.onvoiceschanged = function () {
-    speechSynthesis.getVoices();
+  btn.innerHTML = '<i class="fa-solid fa-stop text-pink-400"></i><span>Stop</span>';
+
+  utterance.onend = () => {
+    btn.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
   };
+  utterance.onerror = () => {
+    btn.innerHTML = '<i class="fa-solid fa-volume-high text-purple-400"></i><span>Listen</span>';
+  };
+
+  speechSynthesis.speak(utterance);
 }
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+function escapeQuotes(str) {
+  return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+window.onload = () => {
+  renderCharacters();
+  if ('speechSynthesis' in window) {
+    speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+  }
+};
 </script>
 </body>
 </html>
