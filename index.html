@@ -1,1 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SpicyChat.ai — Web App</title>
 
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+html,body{
+  min-height:100%;
+}
+
+#chatMessages{
+  scroll-behavior:smooth;
+}
+
+::-webkit-scrollbar{
+  width:6px;
+}
+
+::-webkit-scrollbar-track{
+  background:#0b0e14;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#30384a;
+  border-radius:10px;
+}
+</style>
+</head>
+
+<body class="bg-[#0b0e14] text-gray-100 font-sans min-h-screen flex flex-col">
+
+<!-- ================= HEADER ================= -->
+
+<header class="sticky top-0 z-40 bg-[#0b0e14]/90 backdrop-blur-md border-b border-[#222b3d] px-4 lg:px-8 h-16 flex items-center justify-between">
+
+  <div class="flex items-center gap-4">
+
+    <a href="#"
+      class="text-xl font-black tracking-tight flex items-center gap-2">
+
+      <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
+        SpicyChat
+      </span>
+
+      <span class="text-xs bg-purple-950 border border-purple-800 text-purple-300 px-2 py-0.5 rounded-full font-semibold">
+        AI v4.0
+      </span>
+
+    </a>
+
+  </div>
+
+  <div class="flex items-center gap-3">
+
+    <div class="flex items-center gap-1.5 bg-[#121721] border border-[#222b3d] px-2.5 py-1.5 rounded-full">
+
+      <span class="text-[11px] font-bold text-pink-400 tracking-wider">
+        NSFW
+      </span>
+
+      <button
+        id="nsfwToggle"
+        onclick="toggleNsfw()"
+        aria-label="Toggle NSFW"
+        class="w-8 h-5 bg-pink-600 rounded-full relative transition flex items-center px-0.5 cursor-pointer">
+
+        <div
+          id="nsfwThumb"
+          class="w-3.5 h-3.5 bg-white rounded-full transition-transform translate-x-3.5">
+        </div>
+
+      </button>
+
+    </div>
+
+    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center font-bold text-xs text-white shadow">
+      DF
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex flex-col gap-6">
+
+  <section class="flex flex-col gap-4">
+
+    <div>
+
+      <h1 class="text-2xl md:text-3xl font-black tracking-tight">
+        Explore AI Characters
+      </h1>
+
+      <p class="text-sm text-gray-400 mt-1">
+        Immerse yourself in dynamic, human-like conversations and multilingual roleplay.
+      </p>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="relative w-full">
+
+      <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Search characters..."
+        oninput="filterCharacters()"
+        class="w-full bg-[#121721] border border-[#222b3d] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition">
+
+    </div>
+
+
+    <!-- TAGS -->
+
+    <div
+      id="tagFilters"
+      class="flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold">
+
+      <button
+        onclick="filterByTag('All',this)"
+        class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-purple-600 text-white transition shadow-sm">
+
+        🔥 All
+
+      </button>
+
+      <button
+        onclick="filterByTag('Mami / Shashuri',this)"
+        class="tag-btn whitespace-nowrap px-4 py-2 rounded-xl bg-[#121721]
