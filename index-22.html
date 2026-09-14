@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BlurryVision AI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#08090d;color:#f7f7fa;font-family:Arial,sans-serif}
+button,input{font:inherit}
+.app{max-width:920px;min-height:100vh;margin:auto;background:#0c0e14}
+header{height:68px;padding:0 20px;border-bottom:1px solid #252833;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:21px;font-weight:800}.logo span{color:#c084fc}
+.badge{font-size:11px;color:#c9a8ff;border:1px solid #3a2d4c;padding:7px 10px;border-radius:20px}
+.hero{text-align:center;padding:58px 20px 35px}
+.eyebrow{display:inline-block;color:#c59cff;background:#17121e;border:1px solid #352644;border-radius:30px;padding:8px 13px;font-size:12px;margin-bottom:18px}
+.hero h1{font-size:clamp(40px,8vw,68px);line-height:1.03;letter-spacing:-2px}
+.gradient{background:linear-gradient(90deg,#c084fc,#f472b6);-webkit-background-clip:text;color:transparent}
+.hero p{max-width:620px;margin:17px auto 0;color:#9299a8;line-height:1.65}
+.characters{padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.card{background:#11141b;border:1px solid #272b35;border-radius:18px;padding:18px;transition:.2s}
+.card:hover{transform:translateY(-3px);border-color:#4b3a5e}
+.avatar{height:145px;border-radius:14px;display:grid;place-items:center;font-size:55px;background:linear-gradient(145deg,#25152f,#171a27);margin-bottom:15px}
+.card h3{margin-bottom:7px}.card p{color:#858c9a;font-size:13px;line-height:1.5;min-height:40px}
+.start{width:100%;border:0;border-radius:10px;padding:11px;margin-top:15px;background:#fff;color:#08090d;font-weight:700}
+.info{text-align:center;color:#687080;font-size:12px;padding:15px 20px 40px}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:14px;background:#000c;z-index:20}
+.modal.open{display:flex}
+.chat{width:100%;max-width:550px;height:min(720px,94vh);display:flex;flex-direction:column;overflow:hidden;background:#10131a;border:1px solid #303440;border-radius:20px}
+.chat-head{min-height:70px;padding:13px 16px;display:flex;align-items:center;gap:11px;border-bottom:1px solid #292d37}
+.small-avatar{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:#251730;font-size:22px}
+.character-name{font-weight:750}.status{margin-top:3px;color:#687181;font-size:11px}.online{color:#55d892}
+.close{margin-left:auto;border:0;background:none;color:#9298a4;font-size:27px}
+.messages{flex:1;overflow-y:auto;padding:18px}
+.msg{max-width:84%;margin-bottom:15px;line-height:1.55;font-size:14px}
+.bubble{padding:12px 14px;border-radius:15px}
+.ai .bubble{background:#1a1d26;border-bottom-left-radius:5px;color:#e4e6ec}
+.user{margin-left:auto}.user .bubble{background:linear-gradient(135deg,#713aa1,#a54878);border-bottom-right-radius:5px}
+.message-tools{margin-top:7px}.voice{border:1px solid #303542;background:#181b23;color:#c9ced8;border-radius:8px;padding:6px 9px;font-size:11px}
+.typing{display:none;padding:0 18px 9px;color:#727a89;font-size:12px}
+.composer{padding:12px;display:flex;gap:8px;border-top:1px solid #292d37}
+.composer input{flex:1;min-width:0;outline:none;border:1px solid #303440;background:#090b10;color:#fff;border-radius:11px;padding:12px}
+.send{border:0;border-radius:11px;background:#914de8;color:#fff;padding:0 18px;font-weight:700}
+@media(max-width:700px){.characters{grid-template-columns:1fr}.card{display:grid;grid-template-columns:85px 1fr;gap:12px}.avatar{height:85px;margin:0;grid-row:span 3}.start{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">Blurry<span>Vision</span> AI</div><div class="badge">FREE DEMO</div></header>
+<section class="hero">
+<div class="eyebrow">✦ AI Romantic Characters</div>
+<h1>Your story.<br><span class="gradient">Your character.</span></h1>
+<p>Choose a character and start a natural romantic conversation in English or Bengali.</p>
+</section>
+
+<section class="characters">
+<div class="card"><div class="avatar">🌙</div><div><h3>Chandona</h3><p>Warm, affectionate, confident and expressive.</p></div><button class="start" onclick="openChat('Chandona','🌙')">Start Chat</button></div>
+<div class="card"><div class="avatar">🌹</div><div><h3>Nila</h3><p>Playful, charming, teasing and energetic.</p></div><button class="start" onclick="openChat('Nila','🌹')">Start Chat</button></div>
+<div class="card"><div class="avatar">✨</div><div><h3>Maya</h3><p>Calm, caring, thoughtful and conversational.</p></div><button class="start" onclick="openChat('Maya','✨')">Start Chat</button></div>
+</section>
+<div class="info">Free demo · Native browser voice · English + Bengali</div>
+</div>
+
+<div class="modal" id="modal">
+<div class="chat">
+<div class="chat-head"><div class="small-avatar" id="chatAvatar">🌙</div><div><div class="character-name" id="chatName">Chandona</div><div class="status"><span class="online">●</span> Online · Romantic AI</div></div><button class="close" onclick="closeChat()">×</button></div>
+<div class="messages" id="messages"></div>
+<div class="typing" id="typing">Character is typing…</div>
+<div class="composer"><input id="input" placeholder="Write in English or বাংলা…" autocomplete="off"><button class="send" onclick="sendMessage()">Send</button></div>
+</div>
+</div>
+
+<script>
+let currentCharacter="Chandona";
+const characters={
+Chandona:{greeting:"Hello ❤️ I'm Chandona. I'm glad you're here. Tell me what's on your mind.",replies:["That sounds lovely. Stay a little longer and tell me more about yourself. ❤️","I like the way you express yourself. What would you like to talk about next?","I'm listening. Take your time and tell me what you're feeling.","You have my attention. Let's make this conversation interesting. ✨"]},
+Nila:{greeting:"Hey you 😏 I'm Nila. So, what are we talking about tonight?",replies:["Oh, that's interesting. Don't stop there—tell me the rest. 😄","You're making me curious now. What happens next?","I have a feeling this conversation could get pretty interesting. ✨","Okay, I'm listening. Surprise me."]},
+Maya:{greeting:"Hi ❤️ I'm Maya. It's wonderful to meet you. How are you feeling today?",replies:["I understand. You can talk to me about it without rushing.","That sounds meaningful. Tell me a little more.","I enjoy conversations where two people can be honest with each other. ❤️","I'm right here. What would you like to share?"]}
+};
+
+function openChat(name,avatar){
+currentCharacter=name;
+document.getElementById("chatName").textContent=name;
+document.getElementById("chatAvatar").textContent=avatar;
+document.getElementById("messages").innerHTML="";
+addAI(characters[name].greeting);
+document.getElementById("modal").classList.add("open");
+document.getElementById("input").focus();
+}
+function closeChat(){speechSynthesis.cancel();document.getElementById("modal").classList.remove("open")}
+function addUser(text){
+const w=document.createElement("div"),b=document.createElement("div");
+w.className="msg user";b.className="bubble";b.textContent=text;w.appendChild(b);
+document.getElementById("messages").appendChild(w);scrollMessages();
+}
+function addAI(text){
+const w=document.createElement("div"),b=document.createElement("div"),tools=document.createElement("div"),v=document.createElement("button");
+w.className="msg ai";b.className="bubble";b.textContent=text;tools.className="message-tools";v.className="voice";v.textContent="🔊 Listen";
+v.onclick=()=>speakText(text,v);tools.appendChild(v);w.appendChild(b);w.appendChild(tools);
+document.getElementById("messages").appendChild(w);scrollMessages();
+}
+function generateReply(t){
+t=t.toLowerCase();
+if(/hello|hi|হ্যালো|হাই/.test(t)) return `Hello ❤️ I'm ${currentCharacter}. It's good to hear from you.`;
+if(/how are you|কেমন আছ/.test(t)) return "I'm doing well. I'm enjoying this conversation with you. ❤️";
+if(/love|ভালোবাস/.test(t)) return "That's a beautiful feeling. Tell me what love means to you.";
+if(/story|গল্প/.test(t)) return "I'd love to hear a story from you. Start wherever you like, and I'll follow along.";
+const a=characters[currentCharacter].replies;return a[Math.floor(Math.random()*a.length)];
+}
+function sendMessage(){
+const i=document.getElementById("input"),t=i.value.trim();if(!t)return;
+addUser(t);i.value="";document.getElementById("typing").style.display="block";
+setTimeout(()=>{document.getElementById("typing").style.display="none";addAI(generateReply(t))},550);
+}
+document.getElementById("input").addEventListener("keydown",e=>{if(e.key==="Enter")sendMessage()});
+
+function speakText(text,button){
+speechSynthesis.cancel();
+document.querySelectorAll(".voice").forEach(b=>b.textContent="🔊 Listen");
+const voices=speechSynthesis.getVoices();
+const bangla=/[\u0980-\u09FF]/.test(text);
+let voice=bangla?voices.find(v=>/^bn[-_]/i.test(v.lang)):null;
+if(!voice)voice=voices.find(v=>/^en[-_]/i.test(v.lang));
+if(!voice)voice=voices[0];
+const u=new SpeechSynthesisUtterance(text);
+if(voice){u.voice=voice;u.lang=voice.lang}else u.lang=bangla?"bn-BD":"en-US";
+u.rate=.94;u.pitch=1.02;u.volume=1;
+button.textContent="⏹ Stop";
+u.onend=()=>button.textContent="🔊 Listen";
+u.onerror=()=>button.textContent="🔊 Listen";
+speechSynthesis.speak(u);
+}
+function scrollMessages(){const m=document.getElementById("messages");setTimeout(()=>m.scrollTop=m.scrollHeight,20)}
+document.getElementById("modal").addEventListener("click",e=>{if(e.target===e.currentTarget)closeChat()});
+</script>
+</body>
+</html>
